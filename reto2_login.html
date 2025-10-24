@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Reto 2 — Login | CleanExperts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="img/favicon_cleanexperts.svg">
+  <link rel="icon" href="img/favicon_cleanexperts.ico">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="login-bg">
+  <header class="topbar">
+    <div class="brand"><a href="reto1_portada.html">CleanExperts</a></div>
+    <nav class="nav">
+      <ul>
+        <li><a href="reto2_login.html">Inicio (Login)</a></li>
+        <li><a href="reto7_cotizador.html">Servicios</a></li>
+        <li><a href="reto5_galeria.html">Galería</a></li>
+        <li><a href="reto6_contacto.html">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="login-bg">
+    <section class="login-card animate__animated animate__fadeInUp">
+      <h2>Iniciar sesión</h2>
+      <label for="in-txt-user">Usuario</label>
+      <input id="in-txt-user" type="text" placeholder="cenfo">
+      <label for="in-txt-pass">Contraseña</label>
+      <input id="in-txt-pass" type="password" placeholder="123">
+
+      <a id="btn-login" class="btn btn--primary" href="#">Entrar</a>
+      <div class="help" style="margin-top:.5rem;">
+        <a class="btn btn--ghost" href="reto2_reset.html">¿Olvidé mi contraseña?</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><p>© 2025 CleanExperts</p></footer>
+
+  <!-- JS del login en raíz/js -->
+  <script src="js/reto2_login.js"></script>
+</body>
+</html>

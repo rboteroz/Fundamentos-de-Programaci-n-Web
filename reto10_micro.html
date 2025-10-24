@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Reto 10 — Microinteracciones | CleanExperts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- rutas desde la raíz -->
+  <link rel="icon" type="image/svg+xml" href="img/favicon_cleanexperts.svg">
+  <link rel="icon" href="img/favicon_cleanexperts.ico">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Estilos específicos de este reto (pequeños, para no tocar tu index.css) -->
+  <style>
+    .cards.micro .card{
+      transition: transform .15s ease, box-shadow .15s ease;
+      cursor: pointer;
+    }
+    .cards.micro .card:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 14px 28px rgba(0,0,0,.10);
+    }
+    .btn-top{
+      position: fixed; right: 16px; bottom: 16px;
+      display: none; /* se muestra por JS */
+      z-index: 20;
+    }
+    .btn-top.visible{ display: inline-block; }
+    #panelExtra{ display: none; }
+  </style>
+</head>
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="brand"><a href="reto1_portada.html">CleanExperts</a></div>
+    <nav class="nav">
+      <ul>
+        <li><a href="reto2_login.html">Inicio (Login)</a></li>
+        <li><a href="reto7_cotizador.html">Servicios</a></li>
+        <li><a href="reto5_galeria.html">Galería</a></li>
+        <li><a href="reto6_contacto.html">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container section animate__animated animate__fadeInUp">
+    <h2 class="section__title">Microinteracciones</h2>
+    <p class="muted" style="margin-bottom:1rem;">
+      Pequeñas interacciones que mejoran la UX: copiar al portapapeles, mostrar/ocultar contenido, hover útil y botón “ir arriba”.
+    </p>
+
+    <!-- 1) Copiar al portapapeles -->
+    <section class="card" style="margin-bottom:1rem; padding:1rem;">
+      <h3>Código de descuento</h3>
+      <p class="muted">Comparte este código con tus clientes o úsalo en tu cotizador.</p>
+      <div style="display:flex; gap:.6rem; flex-wrap:wrap; align-items:center;">
+        <input id="txtCodigo" type="text" value="CLEAN10" readonly
+               style="padding:.55rem .6rem; border:1px solid #ddd; border-radius:8px;">
+        <button id="btnCopiar" class="btn btn--secondary">Copiar</button>
+      </div>
+      <p class="muted" style="margin-top:.5rem;">Al copiar, se mostrará un aviso en pantalla (SweetAlert).</p>
+    </section>
+
+    <!-- 2) Mostrar/Ocultar detalle -->
+    <section class="card" style="margin-bottom:1rem; padding:1rem;">
+      <h3>Ver más detalles</h3>
+      <p class="muted">Haz clic en el botón para mostrar u ocultar información adicional.</p>
+      <button id="btnToggle" class="btn btn--primary">Ver más</button>
+      <div id="panelExtra" class="animate__animated animate__fadeIn" style="margin-top: .8rem;">
+        <ul class="quote-list">
+          <li>Tiempo de respuesta aproximado: 1–2 horas.</li>
+          <li>Horarios: Lunes a Sábado, 8:00–18:00.</li>
+          <li>Áreas cubiertas: GAM y alrededores.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 3) Hover en tarjetas -->
+    <section class="card" style="margin-bottom:1rem; padding:1rem;">
+      <h3>Tarjetas con hover</h3>
+      <p class="muted">Pasa el mouse para ver el efecto visual.</p>
+      <div class="cards micro" style="margin-top:.8rem;">
+        <article class="card">
+          <h4>Limpieza residencial</h4>
+          <p class="muted">Ideal para casas y apartamentos.</p>
+        </article>
+        <article class="card">
+          <h4>Limpieza de oficinas</h4>
+          <p class="muted">Estaciones de trabajo y salas de reunión.</p>
+        </article>
+        <article class="card">
+          <h4>Limpieza profunda</h4>
+          <p class="muted">Desincrustado, sarro y áreas difíciles.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 4) Contenido alto para probar el botón “ir arriba” -->
+    <section class="card" style="padding:1rem;">
+      <h3>Contenido de prueba (scroll)</h3>
+      <p class="muted">Desplázate hacia abajo para que aparezca el botón “ir arriba”.</p>
+      <div style="height: 900px;"></div>
+    </section>
+  </main>
+
+  <footer class="footer"><p>© 2025 CleanExperts</p></footer>
+
+  <!-- Botón ir arriba -->
+  <button id="btnTop" class="btn btn--primary btn-top" title="Ir arriba">↑</button>
+
+  <!-- JS de este reto -->
+  <script src="js/reto10_micro.js"></script>
+</body>
+</html>

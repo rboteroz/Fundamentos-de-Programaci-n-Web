@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Reto 8 — Buscador | CleanExperts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- rutas desde la raíz -->
+  <link rel="icon" type="image/svg+xml" href="img/favicon_cleanexperts.svg">
+  <link rel="icon" href="img/favicon_cleanexperts.ico">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="brand"><a href="reto1_portada.html">CleanExperts</a></div>
+    <nav class="nav">
+      <ul>
+        <li><a href="reto2_login.html">Inicio (Login)</a></li>
+        <li><a href="reto7_cotizador.html">Servicios</a></li>
+        <li><a href="reto5_galeria.html">Galería</a></li>
+        <li><a href="reto6_contacto.html">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container section animate__animated animate__fadeInUp">
+    <h2 class="section__title">Buscador de servicios</h2>
+    <p class="muted" style="margin-bottom:1rem;">
+      Escribe un término (por ejemplo: <em>hogar</em>, <em>oficina</em>, <em>alfombras</em>) y/o filtra por categoría.
+    </p>
+
+    <!-- Controles -->
+    <form id="frmBuscar" class="grid2" novalidate>
+      <label>Búsqueda textual
+        <input id="txtBuscar" type="text" placeholder="Ej. limpieza, hogar, ventanas…">
+      </label>
+
+      <label>Categoría
+        <select id="selCategoria">
+          <option value="todas">Todas</option>
+          <option value="hogar">Hogar</option>
+          <option value="oficina">Oficina</option>
+          <option value="especial">Especial</option>
+          <option value="vehiculo">Vehículo</option>
+        </select>
+      </label>
+
+      <div class="grid2__actions">
+        <button type="submit" class="btn btn--primary">Buscar</button>
+        <button type="button" id="btnLimpiar" class="btn btn--ghost">Limpiar</button>
+      </div>
+    </form>
+
+    <!-- Resultados -->
+    <section class="section">
+      <div id="gridResultados" class="cards"></div>
+    </section>
+  </main>
+
+  <footer class="footer"><p>© 2025 CleanExperts</p></footer>
+
+  <!-- JS de este reto -->
+  <script src="js/reto8_buscador.js"></script>
+</body>
+</html>
