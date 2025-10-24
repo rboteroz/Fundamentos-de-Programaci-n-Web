@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Mini-switch | CleanExperts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="img/favicon_cleanexperts.svg">
+  <link rel="icon" href="img/favicon_cleanexperts.ico">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body class="container">
+  <header class="topbar">
+    <div class="brand">CleanExperts</div>
+    <nav class="nav"><ul>
+      <li><a href="reto1_portada.html">Portada</a></li>
+      <li><a href="reto7_cotizador.html">Cotizador</a></li>
+      <li><a href="reto5_galeria.html">Galería</a></li>
+      <li><a href="reto6_contacto.html">Contacto</a></li>
+    </ul></nav>
+  </header>
+
+  <main class="section">
+    <h2 class="section__title">Mini-switch de Retos</h2>
+    <p class="muted">Selecciona un reto para abrirlo:</p>
+
+    <select id="miniSwitch" style="margin:.6rem 0; padding:.55rem .6rem; border-radius:8px; border:1px solid #ddd;">
+      <option value="">— Selecciona —</option>
+      <option value="reto1_portada.html">Reto 1 — Portada</option>
+      <option value="reto2_login.html">Reto 2 — Login</option>
+      <option value="reto2_reset.html">Reto 2 — Reset</option>
+      <option value="reto3_landing.html">Reto 3 — Landing</option>
+      <option value="reto4_catalogo.html">Reto 4 — Catálogo</option>
+      <option value="reto5_galeria.html">Reto 5 — Galería</option>
+      <option value="reto6_contacto.html">Reto 6 — Contacto</option>
+      <option value="reto7_cotizador.html">Reto 7 — Cotizador</option>
+      <option value="reto8_buscador.html">Reto 8 — Buscador</option>
+      <option value="reto9_combos.html">Reto 9 — Combos dinámicos</option>
+      <option value="reto10_micro.html">Reto 10 — Microinteracciones</option>
+    </select>
+  </main>
+
+  <footer class="footer"><p>© 2025 CleanExperts</p></footer>
+
+  <script>
+    document.getElementById('miniSwitch').addEventListener('change', e=>{
+      if(e.target.value){ window.location.href = e.target.value; }
+    });
+  </script>
+</body>
+</html>

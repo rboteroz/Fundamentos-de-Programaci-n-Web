@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Reto 7 — Cotizador | CleanExperts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- rutas desde la raíz -->
+  <link rel="icon" type="image/svg+xml" href="img/favicon_cleanexperts.svg">
+  <link rel="icon" href="img/favicon_cleanexperts.ico">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="brand"><a href="reto1_portada.html">CleanExperts</a></div>
+    <nav class="nav">
+      <ul>
+        <li><a href="reto2_login.html">Inicio (Login)</a></li>
+        <li><a href="reto7_cotizador.html">Servicios</a></li>
+        <li><a href="reto5_galeria.html">Galería</a></li>
+        <li><a href="reto6_contacto.html">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container section animate__animated animate__fadeInUp">
+    <h2 class="section__title">Cotizador de servicios</h2>
+    <p class="muted" style="margin-bottom:1rem;">
+      Completa los datos y obtén el total estimado al instante. (Costo referencial sujeto a inspección.)
+    </p>
+
+    <!-- FORMULARIO -->
+    <form id="frmCotiza" class="grid2" novalidate>
+      <label>Tipo de servicio
+        <select id="tipo" required>
+          <option value="">Seleccione…</option>
+          <option value="hogar">Limpieza residencial</option>
+          <option value="oficina">Limpieza de oficinas</option>
+          <option value="profunda">Limpieza profunda</option>
+          <option value="alfombras">Lavado de alfombras</option>
+          <option value="desinfeccion">Desinfección especial</option>
+        </select>
+      </label>
+
+      <label>Tamaño (m²)
+        <input id="metros" type="number" min="10" step="1" placeholder="Ej. 80" required>
+      </label>
+
+      <label>Intensidad
+        <select id="intensidad" required>
+          <option value="">Seleccione…</option>
+          <option value="estandar">Estándar</option>
+          <option value="profunda">Profunda</option>
+        </select>
+      </label>
+
+      <fieldset class="extras" style="grid-column:1/-1;">
+        <legend>Extras</legend>
+        <label><input type="checkbox" id="exVentanas"> Ventanas (+20% del subtotal)</label>
+        <label><input type="checkbox" id="exTapiceria"> Tapicería (+₡15 000)</label>
+        <label><input type="checkbox" id="exDesinfeccion"> Desinfección focal (+₡10 000)</label>
+      </fieldset>
+
+      <div class="grid2__actions">
+        <button type="submit" class="btn btn--primary">Calcular</button>
+        <button type="button" id="btnLimpiar" class="btn btn--ghost">Limpiar</button>
+      </div>
+    </form>
+
+    <!-- RESULTADO -->
+    <section class="section">
+      <div id="resultado" class="card animate__animated"></div>
+    </section>
+  </main>
+
+  <footer class="footer"><p>© 2025 CleanExperts</p></footer>
+
+  <!-- JS de este reto -->
+  <script src="js/reto7_cotizador.js"></script>
+</body>
+</html>
