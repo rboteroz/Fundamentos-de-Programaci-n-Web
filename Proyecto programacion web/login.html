@@ -1,52 +1,135 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <title>CleanExperts — Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon_cleanexperts.png">
-  <!-- Estilos -->
-  <link rel="stylesheet" href="css/index.css">
-  <link rel="stylesheet" href="css/animate.css">
-  <!-- SweetAlert2 -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.13/lottie.min.js"></script>
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@0.3.0/dist/lottie-player.js"></script>
+<meta charset="utf-8">
+<title>CleanExperts — Iniciar sesión</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon_cleanexperts.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  html{font-family:'Inter',ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial}
+  body{margin:0;color:#0b1220;background:#fff}
+  :root{--brand:#0ea5e9;--bd:#e5e7eb;--muted:#475569;--radius:12px;--pad:24px}
+  .topbar{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--bd)}
+  .topbar-inner{display:flex;align-items:center;gap:16px;padding:12px var(--pad)}
+  .brand a{color:#0ea5e9!important;text-decoration:none;font-weight:800}
+  .nav ul{display:flex;gap:14px;align-items:center;padding:0;margin:0;list-style:none;width:100%}
+  .nav__link{padding:10px 12px;border-radius:10px;text-decoration:none;color:#0b1220;font-weight:600}
+  .nav__link:hover,[aria-current="page"]{background:#f1f5f9}
+  .nav__group{position:relative}
+  .nav__toggle{background:transparent;border:0;cursor:pointer;font:inherit;color:inherit;padding:10px 12px;border-radius:10px}
+  .nav__menu{position:absolute;top:100%;left:0;min-width:220px;background:#fff;border:1px solid var(--bd);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.08);padding:8px;display:none;z-index:60}
+  .nav__item{display:block;padding:10px 12px;border-radius:10px;color:#0b1220;text-decoration:none;white-space:nowrap}
+  .nav__item:hover{background:#f1f5f9}
+  .nav__group.is-open .nav__menu{display:block}
+  .wrap{max-width:980px;margin:0 auto;padding:calc(var(--pad) + 8px) var(--pad)}
+  .grid{display:grid;grid-template-columns:1.2fr 1fr;gap:24px}
+  @media (max-width:900px){.grid{grid-template-columns:1fr}}
+  .card{border:1px solid var(--bd);border-radius:var(--radius);padding:20px;background:#fff;box-shadow:0 8px 24px rgba(16,24,40,.05)}
+  h1{margin:0 0 10px;font-size:clamp(1.9rem,1.5rem + 1.2vw,2.4rem);font-weight:800}
+  p.muted{color:var(--muted)}
+  label{font-weight:600;margin-bottom:6px;display:block}
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+  input[type="text"],input[type="password"]{width:100%;border:1px solid var(--bd);border-radius:12px;padding:12px 14px;font-size:16px}
+  input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(14,165,233,.18)}
+  .btn{appearance:none;border:0;border-radius:12px;cursor:pointer;font-weight:700;min-height:44px;padding:12px 16px;background:#0ea5e9;color:#fff}
+  .hero{border:1px dashed var(--bd);border-radius:12px;padding:16px;background:#fafafa}
+  footer{border-top:1px solid var(--bd);padding:18px var(--pad);text-align:center;color:#64748b;margin-top:28px}
+  .tour360{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.98);z-index:10000}
+  .tour360.is-open{display:grid}.tour360__frame{width:min(96vw,1400px);height:min(90vh,850px);border:0;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+  .tour360__close{position:absolute;top:14px;right:18px;font-size:34px;line-height:1;background:transparent;border:0;color:#fff;cursor:pointer}
+</style>
 </head>
-<body class="login-bg">
-  <!-- Menú -->
-  <header class="topbar">
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
     <div class="brand"><a href="index.html">CleanExperts</a></div>
     <nav class="nav" aria-label="Navegación principal">
       <ul>
-        <li><a class="nav__link is-active" href="login.html" aria-current="page">Inicio</a></li>
+        <li><a class="nav__link" href="login.html" aria-current="page">Inicio</a></li>
         <li><a class="nav__link" href="apps.html">Servicios</a></li>
         <li><a class="nav__link" href="gallery.html">Galería</a></li>
         <li><a class="nav__link" href="contacto.html">Contacto</a></li>
+        <li class="nav__group">
+          <button class="nav__toggle nav__link" aria-haspopup="true" aria-expanded="false">Formularios ▾</button>
+          <div class="nav__menu" role="menu">
+            <a class="nav__item" role="menuitem" href="contacto_form.html">Contacto</a>
+            <a class="nav__item" role="menuitem" href="suscripcion.html">Suscripción</a>
+            <a class="nav__item" role="menuitem" href="encuesta.html">Encuesta</a>
+          </div>
+        </li>
+        <li><a class="nav__link" href="#" id="navTour360">Tour 360</a></li>
       </ul>
     </nav>
-  </header>
+  </div>
+</header>
 
-  <!-- Formulario -->
-  <main class="card login-card animate__animated animate__fadeInUp">
-    <h2>Iniciar sesión</h2>
-    <label for="user">Usuario</label>
-    <input id="user" type="text" placeholder="Usuario">
-    <label for="pass">Contraseña</label>
-    <input id="pass" type="password" placeholder="Contraseña">
-    <button id="btnLogin" class="btn btn--primary">Entrar</button>
+<main class="wrap">
+  <div class="grid">
+    <section class="card">
+      <h1>Iniciar sesión</h1>
+      <p class="muted">Use las credenciales de la demo: <b>Usuario:</b> cenfo — <b>Contraseña:</b> 123</p>
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="user">Usuario</label>
+          <input id="user" name="user" type="text" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label for="pass">Contraseña</label>
+          <input id="pass" name="pass" type="password" autocomplete="current-password" required>
+        </div>
+        <button class="btn" type="submit">Entrar</button>
+      </form>
+    </section>
+    <aside class="hero">
+      <h3 style="margin:0 0 8px">¿No tiene cuenta?</h3>
+      <p class="muted" style="margin:0 0 8px">Esta es una demo educativa. El alta real no está habilitada.</p>
+      <a class="nav__link" href="reset.html">¿Olvidó su contraseña?</a>
+    </aside>
+  </div>
+</main>
 
-    <!-- Utilidades de acceso -->
-    <div style="text-align:center; margin-top:.5rem;">
-      <a class="btn btn--ghost" href="reset.html">¿Olvidé mi contraseña?</a>
-    </div>
-  </main>
+<footer>© 2025 CleanExperts</footer>
 
-  <footer class="footer"><p>© 2025 CleanExperts</p></footer>
+<div id="tour360" class="tour360" aria-hidden="true" role="dialog" aria-label="Tour Virtual 360">
+  <button class="tour360__close" aria-label="Cerrar tour">&times;</button>
+  <iframe class="tour360__frame" src="about:blank" title="Visor 360"></iframe>
+</div>
 
-  <!-- Lógica de login (no cambia) -->
-  <script src="js/login.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  // Dropdown
+  (()=>{const g=document.querySelector('.nav__group');if(!g)return;const b=g.querySelector('.nav__toggle');
+    b.addEventListener('click',()=>{const o=g.classList.toggle('is-open');b.setAttribute('aria-expanded',o?'true':'false')});
+    document.addEventListener('click',e=>{if(!g.contains(e.target)){g.classList.remove('is-open');b.setAttribute('aria-expanded','false')}});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'){g.classList.remove('is-open');b.setAttribute('aria-expanded','false')}})})();
+
+  // Login demo
+  document.getElementById('loginForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const u = document.getElementById('user').value.trim();
+    const p = document.getElementById('pass').value.trim();
+    if(u==='cenfo' && p==='123'){
+      localStorage.setItem('cx_auth','true');
+      localStorage.setItem('cx_user',u);
+      await Swal.fire({icon:'success',title:'Bienvenido',text:'Acceso correcto',confirmButtonColor:'#0ea5e9'});
+      location.href='sitio.html';
+    }else{
+      Swal.fire({icon:'error',title:'Credenciales inválidas',text:'Verifique usuario/contraseña',confirmButtonColor:'#0ea5e9'});
+    }
+  });
+
+  // Tour
+  (()=>{const btn=document.getElementById('navTour360');if(!btn)return;const modal=document.getElementById('tour360');
+    const frame=modal.querySelector('.tour360__frame');const cl=modal.querySelector('.tour360__close');
+    function open(){frame.src='tour.html';modal.classList.add('is-open');modal.setAttribute('aria-hidden','false');document.addEventListener('keydown',onKey)}
+    function close(){modal.classList.remove('is-open');modal.setAttribute('aria-hidden','true');frame.src='about:blank';document.removeEventListener('keydown',onKey)}
+    function onKey(e){if(e.key==='Escape')close()}btn.addEventListener('click',e=>{e.preventDefault();open()});cl.addEventListener('click',close);
+    modal.addEventListener('click',e=>{if(e.target===modal)close()});
+  })();
+</script>
 </body>
 </html>
-

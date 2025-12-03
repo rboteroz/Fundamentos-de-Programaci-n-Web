@@ -1,132 +1,651 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <title>CleanExperts — Cotizador</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon_cleanexperts.png">
-  <link rel="stylesheet" href="css/index.css">
-  <link rel="stylesheet" href="css/animate.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<meta charset="utf-8">
+<title>CleanExperts — Cotización</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon_cleanexperts.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  html{font-family:'Inter',ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial}
+  body{margin:0;color:#0b1220;background:#fff}
+  :root{--brand:#0ea5e9;--bd:#e5e7eb;--muted:#475569;--pad:24px;--radius:12px}
+
+  /* Topbar */
+  .topbar{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--bd)}
+  .topbar-inner{display:flex;align-items:center;gap:16px;padding:12px var(--pad)}
+  .brand a{color:#0ea5e9!important;text-decoration:none;font-weight:800}
+  .nav ul{display:flex;gap:14px;align-items:center;padding:0;margin:0;list-style:none;width:100%}
+  .nav__link{padding:10px 12px;border-radius:10px;text-decoration:none;color:#0b1220;font-weight:600}
+  .nav__link:hover,[aria-current="page"]{background:#f1f5f9}
+  .nav__group{position:relative}
+  .nav__toggle{background:transparent;border:0;cursor:pointer;font:inherit;color:inherit;padding:10px 12px;border-radius:10px}
+  .nav__menu{position:absolute;top:100%;left:0;min-width:220px;background:#fff;border:1px solid var(--bd);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.08);padding:8px;display:none;z-index:60}
+  .nav__item{display:block;padding:10px 12px;border-radius:10px;color:#0b1220;text-decoration:none;white-space:nowrap}
+  .nav__item:hover{background:#f1f5f9}
+  .nav__group.is-open .nav__menu{display:block}
+
+  /* Layout */
+  .wrap{max-width:1200px;margin:0 auto;padding:calc(var(--pad) + 8px) var(--pad)}
+  h1{margin:0 0 10px;font-size:clamp(1.9rem,1.5rem + 1.2vw,2.4rem);font-weight:800}
+  p.muted{color:var(--muted)}
+  .card{background:#fff;border:1px solid var(--bd);border-radius:var(--radius);padding:18px 16px;box-shadow:0 8px 24px rgba(16,24,40,.05);margin-bottom:16px}
+  .grid{display:grid;gap:16px;grid-template-columns:repeat(12,1fr)}
+  .span-12{grid-column:span 12}.span-8{grid-column:span 8}.span-6{grid-column:span 6}.span-4{grid-column:span 4}.span-3{grid-column:span 3}
+  @media (max-width:1024px){.span-8,.span-6,.span-4,.span-3{grid-column:span 12}}
+
+  label{font-weight:600;margin-bottom:6px;display:block}
+  input,select,textarea{width:100%;border:1px solid var(--bd);border-radius:12px;padding:12px 14px;font-size:16px}
+  input:focus,select:focus,textarea:focus{border-color:#0ea5e9;box-shadow:0 0 0 3px rgba(14,165,233,.18)}
+  textarea{min-height:90px;resize:vertical}
+
+  .fieldset{border:1px solid var(--bd);border-radius:12px;padding:14px}
+  .legend{font-weight:800;margin-bottom:8px}
+
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .btn{appearance:none;border:0;border-radius:12px;cursor:pointer;font-weight:700;min-height:44px;padding:12px 16px}
+  .btn--primary{background:#0ea5e9;color:#fff}
+  .btn--ghost{background:#f1f5f9}
+  .btn--danger{background:#ef4444;color:#fff}
+
+  /* Toggles alineados */
+  .toggles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+  .toggle{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--bd);border-radius:12px;padding:10px 12px;user-select:none;background:#fff}
+  .toggle input[type="checkbox"]{width:18px;height:18px}
+  .toggle__note{margin-left:auto;color:#334155;font-weight:700}
+  .toggle.is-on{background:#e6f6fd;border-color:#bae6fd;color:#0369a1}
+
+  /* Tabla de resumen */
+  table.sum{width:100%;border-collapse:collapse}
+  .sum th,.sum td{border-bottom:1px solid #e2e8f0;padding:10px 8px;text-align:left}
+  .sum tfoot td{font-weight:800}
+  .sum .num{text-align:right;white-space:nowrap}
+
+  footer{border-top:1px solid var(--bd);padding:18px var(--pad);text-align:center;color:#64748b;margin-top:28px}
+
+  /* Tour 360 overlay */
+  .tour360{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.98);z-index:10000}
+  .tour360.is-open{display:grid}
+  .tour360__frame{width:min(96vw,1400px);height:min(90vh,850px);border:0;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+  .tour360__close{position:absolute;top:14px;right:18px;font-size:34px;line-height:1;background:transparent;border:0;color:#fff;cursor:pointer}
+</style>
 </head>
 <body>
-  <header class="topbar">
+<header class="topbar">
+  <div class="topbar-inner">
     <div class="brand"><a href="index.html">CleanExperts</a></div>
     <nav class="nav" aria-label="Navegación principal">
       <ul>
         <li><a class="nav__link" href="login.html">Inicio</a></li>
-        <li><a class="nav__link is-active" href="apps.html" aria-current="page">Servicios</a></li>
+        <li><a class="nav__link" href="apps.html" aria-current="page">Servicios</a></li>
         <li><a class="nav__link" href="gallery.html">Galería</a></li>
         <li><a class="nav__link" href="contacto.html">Contacto</a></li>
+
+        <li class="nav__group">
+          <button class="nav__toggle nav__link" aria-haspopup="true" aria-expanded="false">Formularios ▾</button>
+          <div class="nav__menu" role="menu">
+            <a class="nav__item" role="menuitem" href="contacto_form.html">Contacto</a>
+            <a class="nav__item" role="menuitem" href="suscripcion.html">Suscripción</a>
+            <a class="nav__item" role="menuitem" href="encuesta.html">Encuesta</a>
+          </div>
+        </li>
+
+        <li><a class="nav__link" href="#" id="navTour360">Tour 360</a></li>
       </ul>
     </nav>
-  </header>
+  </div>
+</header>
 
-  <main class="container">
-    <section class="section">
-      <h2 class="section__title">Cotizador de servicios</h2>
-      <form id="frmCotiza" class="grid2">
-        <label>Tipo de servicio
-          <select id="tipo">
-            <option value="">Seleccione…</option>
-            <option value="hogar">Limpieza de hogar</option>
-            <option value="oficina">Limpieza de oficina</option>
-            <option value="vehiculo">Limpieza de vehículo</option>
-          </select>
-        </label>
+<main class="wrap">
+  <h1>Solicitar cotización</h1>
+  <p class="muted">Complete los detalles. Los precios se muestran en <b>₡</b> (colón CRC). En el PDF usamos fallback “CRC” para máxima compatibilidad.</p>
 
-        <label>Tamaño (m²)
-          <input id="metros" type="number" min="10" step="1" placeholder="Ej. 80">
-        </label>
+  <section class="card">
+    <form id="qForm" class="grid" novalidate>
 
-        <label>Intensidad
-          <select id="intensidad">
-            <option value="">Seleccione…</option>
-            <option value="estandar">Estándar</option>
-            <option value="profunda">Profunda</option>
-          </select>
-        </label>
-
-        <fieldset class="extras">
-          <legend>Extras</legend>
-          <label><input type="checkbox" value="ventanas" id="exVentanas"> Limpieza de ventanas</label>
-          <label><input type="checkbox" value="tapiceria" id="exTapiceria"> Tapicería (sofás/sillas)</label>
-          <label><input type="checkbox" value="desinfeccion" id="exDesinfeccion"> Desinfección</label>
-        </fieldset>
-
-        <div class="grid2__actions">
-          <button type="submit" class="btn btn--primary">Calcular</button>
-          <button type="button" id="btnLimpiar" class="btn btn--ghost">Limpiar</button>
+      <!-- DATOS DEL CLIENTE -->
+      <div class="span-12 fieldset">
+        <div class="legend">Datos del cliente</div>
+        <div class="grid">
+          <div class="span-6">
+            <label for="qNombre">Nombre</label>
+            <input id="qNombre" type="text" placeholder="Cliente">
+          </div>
+          <div class="span-6">
+            <label for="qEmail">Email</label>
+            <input id="qEmail" type="email" placeholder="correo@ejemplo.com">
+          </div>
+          <div class="span-6">
+            <label for="qTel">Teléfono</label>
+            <input id="qTel" type="tel" placeholder="+506 8888-8888">
+          </div>
+          <div class="span-6">
+            <label for="qId">Identificación (opcional)</label>
+            <input id="qId" type="text" placeholder="Cédula / N° ID">
+          </div>
         </div>
-      </form>
-    </section>
+      </div>
 
-    <section class="section">
-      <div id="resultado" class="card animate__animated"></div>
-    </section>
-  </main>
+      <!-- UBICACIÓN Y AGENDA -->
+      <div class="span-12 fieldset">
+        <div class="legend">Ubicación y agenda</div>
+        <div class="grid">
+          <div class="span-6">
+            <label for="qProv">Provincia / Cantón / Distrito</label>
+            <input id="qProv" type="text" placeholder="San José, Curridabat, ...">
+          </div>
+          <div class="span-6">
+            <label for="qDir">Dirección</label>
+            <input id="qDir" type="text" placeholder="Dirección exacta">
+          </div>
+          <div class="span-4">
+            <label for="qFecha">Fecha</label>
+            <input id="qFecha" type="date">
+          </div>
+          <div class="span-4">
+            <label for="qHora">Hora</label>
+            <input id="qHora" type="time">
+          </div>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <label class="toggle"><input type="checkbox" id="qParqueo"> Parqueo de pago <span class="toggle__note">+₡2 000</span></label>
+          <label class="toggle"><input type="checkbox" id="qNocturno"> Horario nocturno (≥ 18:00) <span class="toggle__note">+15%</span></label>
+          <label class="toggle"><input type="checkbox" id="qUrgente"> Urgente (&lt; 24h) <span class="toggle__note">+20%</span></label>
+        </div>
+      </div>
 
-  <footer class="footer"><p>© 2025 CleanExperts</p></footer>
+      <!-- ALCANCE GENERAL -->
+      <div class="span-12 fieldset">
+        <div class="legend">Alcance</div>
+        <div class="grid">
+          <div class="span-4">
+            <label for="qTipo">Tipo de servicio</label>
+            <select id="qTipo">
+              <option value="residencial">Residencial</option>
+              <option value="oficinas">Oficinas</option>
+              <option value="vehiculos">Vehículos</option>
+            </select>
+          </div>
+          <div class="span-4">
+            <label for="qArea">Área (m²)</label>
+            <input id="qArea" type="number" min="10" step="1" value="50">
+          </div>
+          <div class="span-4">
+            <label for="qFreq">Frecuencia</label>
+            <select id="qFreq">
+              <option value="unico">Único</option>
+              <option value="semanal">Semanal (−15%)</option>
+              <option value="mensual">Mensual (−8%)</option>
+            </select>
+          </div>
+        </div>
 
-  <script>
-  const frm = document.getElementById('frmCotiza');
-  const res = document.getElementById('resultado');
-  const btnLimpiar = document.getElementById('btnLimpiar');
+        <!-- Campos dinámicos por tipo -->
+        <div id="blkResidencial" class="grid" style="margin-top:10px">
+          <div class="span-3"><label for="rHabit">Habitaciones</label><input id="rHabit" type="number" min="0" value="2"></div>
+          <div class="span-3"><label for="rBanos">Baños</label><input id="rBanos" type="number" min="1" value="1"></div>
+          <div class="span-3"><label for="rPisos">Pisos</label><input id="rPisos" type="number" min="1" value="1"></div>
+          <div class="span-3"><label for="rVentanas">Ventanas (cant.)</label><input id="rVentanas" type="number" min="0" value="8"></div>
+        </div>
 
-  frm.addEventListener('submit', function(e){
-    e.preventDefault();
+        <div id="blkOficinas" class="grid" style="margin-top:10px;display:none">
+          <div class="span-3"><label for="oPuestos">Puestos de trabajo</label><input id="oPuestos" type="number" min="0" value="10"></div>
+          <div class="span-3"><label for="oBanos">Baños</label><input id="oBanos" type="number" min="1" value="2"></div>
+          <div class="span-3"><label for="oSalas">Salas de reunión</label><input id="oSalas" type="number" min="0" value="1"></div>
+          <div class="span-3"><label for="oPisos">Pisos</label><input id="oPisos" type="number" min="1" value="1"></div>
+        </div>
 
-    const tipo = document.getElementById('tipo').value;
-    const m2   = parseInt(document.getElementById('metros').value,10);
-    const inten = document.getElementById('intensidad').value;
+        <div id="blkVehiculos" class="grid" style="margin-top:10px;display:none">
+          <div class="span-4">
+            <label for="vTipo">Tipo de vehículo</label>
+            <select id="vTipo">
+              <option value="sedan">Sedán/Hatchback</option>
+              <option value="suv">SUV</option>
+              <option value="pickup">Pickup</option>
+              <option value="van">Van/Buseta</option>
+            </select>
+          </div>
+          <div class="span-4"><label for="vAsientos">Asientos a lavar (tapicería)</label><input id="vAsientos" type="number" min="0" value="0"></div>
+          <div class="span-4">
+            <label for="vSuciedad">Nivel de suciedad</label>
+            <select id="vSuciedad">
+              <option value="normal">Normal</option>
+              <option value="alta">Alta (+10%)</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
-    if(!tipo || !inten || isNaN(m2) || m2 <= 0){
-      Swal.fire({icon:'warning', title:'Verifique los datos', text:'Complete tipo, m² e intensidad.'});
-      return;
+      <!-- EXTRAS -->
+      <div class="span-12 fieldset">
+        <div class="legend">Extras</div>
+        <div class="toggles">
+          <label class="toggle"><input type="checkbox" class="ex" data-key="vent20" data-type="pct" data-val="0.20"> Ventanas <span class="toggle__note">+20%</span></label>
+          <label class="toggle"><input type="checkbox" class="ex" data-key="tapi15" data-type="fix" data-val="15000"> Tapicería hogar <span class="toggle__note">+₡15 000</span></label>
+          <label class="toggle"><input type="checkbox" class="ex" data-key="desinf10" data-type="fix" data-val="10000"> Desinfección <span class="toggle__note">+₡10 000</span></label>
+          <label class="toggle"><input type="checkbox" class="ex" data-key="cocina12" data-type="fix" data-val="12000"> Cocina profunda <span class="toggle__note">+₡12 000</span></label>
+          <label class="toggle"><input type="checkbox" class="ex" data-key="horno5" data-type="fix" data-val="5000"> Horno <span class="toggle__note">+₡5 000</span></label>
+          <label class="toggle"><input type="checkbox" class="ex" data-key="refri6" data-type="fix" data-val="6000"> Refrigeradora <span class="toggle__note">+₡6 000</span></label>
+          <label class="toggle">
+            <input type="checkbox" class="ex" data-key="banosExtra" data-type="fix-mult" data-val="4000" data-bind="#exBanos"> Baños extra
+            <span class="toggle__note">+₡4 000 c/u</span>
+          </label>
+          <input id="exBanos" type="number" min="0" value="0" style="width:120px">
+
+          <!-- Vehículo -->
+          <label class="toggle"><input type="checkbox" class="ex" data-key="ozono8" data-type="fix" data-val="8000"> Ozono interior (vehículo) <span class="toggle__note">+₡8 000</span></label>
+          <label class="toggle"><input type="checkbox" class="ex" data-key="pelo10" data-type="fix" data-val="10000"> Remoción pelo de mascota <span class="toggle__note">+₡10 000</span></label>
+        </div>
+      </div>
+
+      <!-- NOTAS Y CUPÓN -->
+      <div class="span-12 fieldset">
+        <div class="legend">Notas y descuentos</div>
+        <div class="grid">
+          <div class="span-8">
+            <label for="qNotas">Notas</label>
+            <textarea id="qNotas" placeholder="Instrucciones especiales, restricciones, etc."></textarea>
+          </div>
+          <div class="span-4">
+            <label for="qCupon">Cupón</label>
+            <input id="qCupon" type="text" placeholder="CLEAN10 / PRIMERA">
+            <p class="muted" style="margin:.35rem 0 0">CLEAN10 = 10% • PRIMERA = 8%</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCIONES -->
+      <div class="span-12">
+        <div class="row">
+          <button type="button" class="btn btn--ghost" id="btnCalc">Calcular</button>
+          <button type="button" class="btn btn--primary" id="btnPDF">Descargar PDF</button>
+          <button type="button" class="btn btn--ghost" id="btnMail">Enviar por correo</button>
+          <button type="button" class="btn btn--ghost" id="btnSave">Guardar borrador</button>
+          <button type="button" class="btn btn--danger" id="btnClear">Limpiar</button>
+        </div>
+      </div>
+
+      <!-- RESUMEN -->
+      <div class="span-12">
+        <div id="qOut" class="card" style="background:#fafafa">
+          <p class="muted" style="margin:0">Calcule para ver el desglose de partidas aquí…</p>
+        </div>
+      </div>
+    </form>
+  </section>
+</main>
+
+<footer>© 2025 CleanExperts</footer>
+
+<!-- Tour overlay -->
+<div id="tour360" class="tour360" aria-hidden="true" role="dialog" aria-label="Tour Virtual 360">
+  <button class="tour360__close" aria-label="Cerrar tour">&times;</button>
+  <iframe class="tour360__frame" src="about:blank" title="Visor 360"></iframe>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+<script>
+  /* ---------- Navbar: Dropdown + Tour ---------- */
+  (()=>{const g=document.querySelector('.nav__group');if(g){const b=g.querySelector('.nav__toggle');
+    b.addEventListener('click',()=>{const o=g.classList.toggle('is-open');b.setAttribute('aria-expanded',o?'true':'false')});
+    document.addEventListener('click',e=>{if(!g.contains(e.target)){g.classList.remove('is-open');b.setAttribute('aria-expanded','false')}});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'){g.classList.remove('is-open');b.setAttribute('aria-expanded','false')}})} })();
+
+  (()=>{const btn=document.getElementById('navTour360');if(!btn)return;const modal=document.getElementById('tour360');
+    const frame=modal.querySelector('.tour360__frame');const cl=modal.querySelector('.tour360__close');
+    function open(){frame.src='tour.html';modal.classList.add('is-open');modal.setAttribute('aria-hidden','false');document.addEventListener('keydown',onKey)}
+    function close(){modal.classList.remove('is-open');modal.setAttribute('aria-hidden','true');frame.src='about:blank';document.removeEventListener('keydown',onKey)}
+    function onKey(e){if(e.key==='Escape')close()}btn.addEventListener('click',e=>{e.preventDefault();open()});cl.addEventListener('click',close);
+    modal.addEventListener('click',e=>{if(e.target===modal)close()});
+  })();
+
+  /* ---------- UI dinámica por tipo ---------- */
+  const tipoEl = document.getElementById('qTipo');
+  const blkResid = document.getElementById('blkResidencial');
+  const blkOfi = document.getElementById('blkOficinas');
+  const blkVeh = document.getElementById('blkVehiculos');
+
+  function toggleBlocks(){
+    const t = tipoEl.value;
+    blkResid.style.display = (t==='residencial') ? '' : 'none';
+    blkOfi.style.display   = (t==='oficinas')   ? '' : 'none';
+    blkVeh.style.display   = (t==='vehiculos')  ? '' : 'none';
+  }
+  tipoEl.addEventListener('change', toggleBlocks); toggleBlocks();
+
+  /* ---------- Helpers de moneda ---------- */
+  function col(n){return new Intl.NumberFormat('es-CR',{style:'currency',currency:'CRC',maximumFractionDigits:0}).format(n)}
+  function colPDF(n){ // fallback: reemplazar ₡ por "CRC " por compatibilidad de fuente en PDF
+    return col(n).replace('₡','CRC ');
+  }
+
+  /* ---------- Fórmulas base ---------- */
+  function basePorTipo(tipo){
+    if(tipo==='residencial') return 900;    // ₡/m² referencia
+    if(tipo==='oficinas')   return 1100;    // ₡/m²
+    // vehiculos: se usa área como escala base “equivalente”
+    return 800;
+  }
+  function multFrecuencia(freq){
+    if(freq==='semanal') return 0.85; // -15%
+    if(freq==='mensual') return 0.92; // -8%
+    return 1;
+  }
+
+  /* ---------- Cálculo ---------- */
+  function calcular(){
+    const nombre=(document.getElementById('qNombre').value||'Cliente').trim();
+    const email=(document.getElementById('qEmail').value||'').trim();
+    const tel=(document.getElementById('qTel').value||'').trim();
+    const id=(document.getElementById('qId').value||'').trim();
+    const prov=(document.getElementById('qProv').value||'').trim();
+    const dir=(document.getElementById('qDir').value||'').trim();
+    const fecha=(document.getElementById('qFecha').value||'');
+    const hora=(document.getElementById('qHora').value||'');
+    const distKm=Math.max(0, +document.getElementById('qDistKm').value||0);
+    const parqueo=document.getElementById('qParqueo').checked;
+    const noct=document.getElementById('qNocturno').checked;
+    const urg=document.getElementById('qUrgente').checked;
+
+    const tipo=tipoEl.value;
+    const area=Math.max(10, +document.getElementById('qArea').value||0);
+    const freq=document.getElementById('qFreq').value;
+
+    // Detalles por tipo
+    const rHabit=+document.getElementById('rHabit').value||0;
+    const rBanos=+document.getElementById('rBanos').value||0;
+    const rPisos=+document.getElementById('rPisos').value||1;
+    const rVentanas=+document.getElementById('rVentanas').value||0;
+
+    const oPuestos=+document.getElementById('oPuestos').value||0;
+    const oBanos=+document.getElementById('oBanos').value||0;
+    const oSalas=+document.getElementById('oSalas').value||0;
+    const oPisos=+document.getElementById('oPisos').value||1;
+
+    const vTipo=(document.getElementById('vTipo').value||'sedan');
+    const vAsientos=+document.getElementById('vAsientos').value||0;
+    const vSuciedad=(document.getElementById('vSuciedad').value||'normal');
+
+    const cupon=(document.getElementById('qCupon').value||'').trim().toUpperCase();
+    const notas=(document.getElementById('qNotas').value||'').trim();
+
+    let partidas = [];
+    // Base
+    const baseM2 = basePorTipo(tipo);
+    let base = baseM2 * area * multFrecuencia(freq);
+    partidas.push({desc:`Base ${tipo} (${area} m² × ${col(baseM2)}/m²)`, monto: Math.round(base)});
+
+    // Ajustes por tipo
+    if(tipo==='residencial'){
+      if(rHabit>2){ const extra=(rHabit-2)*2000; base+=extra; partidas.push({desc:`Habitaciones extra (${rHabit-2})`, monto:extra}); }
+      if(rBanos>1){ const extra=(rBanos-1)*3000; base+=extra; partidas.push({desc:`Baños extra (${rBanos-1})`, monto:extra}); }
+      if(rPisos>1){ const extra=(rPisos-1)*5000; base+=extra; partidas.push({desc:`Pisos adicionales (${rPisos-1})`, monto:extra}); }
+      if(rVentanas>10){ const extra=(rVentanas-10)*800; base+=extra; partidas.push({desc:`Ventanas adicionales (${rVentanas-10})`, monto:extra}); }
+    }
+    if(tipo==='oficinas'){
+      if(oPuestos>10){ const extra=(oPuestos-10)*800; base+=extra; partidas.push({desc:`Puestos extra (${oPuestos-10})`, monto:extra}); }
+      if(oBanos>2){ const extra=(oBanos-2)*3000; base+=extra; partidas.push({desc:`Baños extra (${oBanos-2})`, monto:extra}); }
+      if(oSalas>1){ const extra=(oSalas-1)*4000; base+=extra; partidas.push({desc:`Salas reunión extra (${oSalas-1})`, monto:extra}); }
+      if(oPisos>1){ const extra=(oPisos-1)*8000; base+=extra; partidas.push({desc:`Pisos adicionales (${oPisos-1})`, monto:extra}); }
+    }
+    if(tipo==='vehiculos'){
+      const multTipo = (vTipo==='sedan'?1 : vTipo==='suv'?1.2 : vTipo==='pickup'?1.1 : 1.4);
+      const addTipo = Math.round(base*(multTipo-1));
+      if(addTipo>0){ base+=addTipo; partidas.push({desc:`Tipo vehículo (${vTipo})`, monto:addTipo}); }
+      if(vAsientos>0){ const extra=vAsientos*3000; base+=extra; partidas.push({desc:`Lavado de asientos (${vAsientos})`, monto:extra}); }
+      if(vSuciedad==='alta'){ const extra=Math.round(base*0.10); base+=extra; partidas.push({desc:`Suciedad alta (+10%)`, monto:extra}); }
     }
 
-    let tarifa = 0; // ₡/m²
-    if (tipo === 'hogar') tarifa = 1200;
-    else if (tipo === 'oficina') tarifa = 1400;
-    else if (tipo === 'vehiculo') tarifa = 900;
-
-    const mult = (inten === 'profunda') ? 1.3 : 1.0;
-
-    const exVentanas = document.getElementById('exVentanas').checked ? 0.20 : 0; // +20% del sub
-    const exTapiceria = document.getElementById('exTapiceria').checked ? 15000 : 0; // fijo
-    const exDesinf = document.getElementById('exDesinfeccion').checked ? 10000 : 0; // fijo
-
-    const sub = tarifa * m2 * mult;
-    const plus = (sub * exVentanas) + exTapiceria + exDesinf;
-    const iva = (sub + plus) * 0.13;
-    const total = Math.round(sub + plus + iva);
-
-    res.classList.remove('animate__fadeInUp');
-    res.innerHTML = `
-      <h3>Resultado de la cotización</h3>
-      <p><b>Servicio:</b> ${tipo} &nbsp;•&nbsp; <b>Intensidad:</b> ${inten} &nbsp;•&nbsp; <b>Área:</b> ${m2} m²</p>
-      <ul class="quote-list">
-        <li>Tarifa Basica: ₡ ${Math.round(sub).toLocaleString()}</li>
-        <li>Extras: ₡ ${Math.round(plus).toLocaleString()}</li>
-        <li>IVA (13%): ₡ ${Math.round(iva).toLocaleString()}</li>
-        <li class="quote-total">Total: ₡ ${total.toLocaleString()}</li>
-      </ul>
-      <p class="muted">* Precios de referencia. Sujeto a inspección.</p>
-    `;
-    res.classList.add('animate__fadeInUp');
-
-    Swal.fire({
-      title: 'Cotización lista',
-      text: `Total aproximado: ₡ ${total.toLocaleString()}`,
-      icon: 'success',
-      confirmButtonColor: '#0d6efd'
+    // Extras
+    const exEls=[...document.querySelectorAll('.ex')];
+    let pct = 0, extras = 0;
+    exEls.forEach(ch=>{
+      if(!ch.checked) return;
+      const key=ch.dataset.key, type=ch.dataset.type, val=+ch.dataset.val;
+      if(type==='pct'){ pct += val; partidas.push({desc:`Extra ${key} (${Math.round(val*100)}%)`, monto: Math.round(base*val)}); }
+      else if(type==='fix'){ extras += val; partidas.push({desc:`Extra ${key}`, monto: val}); }
+      else if(type==='fix-mult'){
+        const bindSel=ch.dataset.bind; const nEl=bindSel?document.querySelector(bindSel):null; const n = Math.max(0, +(nEl?.value||0));
+        if(n>0){ const m = val*n; extras += m; partidas.push({desc:`Extra ${key} ×${n}`, monto:m}); }
+      }
     });
+    let subtotal = Math.round(base*(1+pct) + extras);
+
+    // Logística y recargos
+    let logistica = 0;
+    if(distKm>10){ const m = Math.round((distKm-10)*350); logistica += m; partidas.push({desc:`Recorrido (${distKm-10} km × ₡350)`, monto:m}); }
+    if(parqueo){ logistica += 2000; partidas.push({desc:`Parqueo de pago`, monto:2000}); }
+    if(noct){ const m = Math.round((subtotal+logistica)*0.15); logistica += m; partidas.push({desc:`Horario nocturno (+15%)`, monto:m}); }
+    if(urg){ const m = Math.round((subtotal+logistica)*0.20); logistica += m; partidas.push({desc:`Urgente (+20%)`, monto:m}); }
+
+    let antesDescuento = subtotal + logistica;
+    // Cupón
+    let desc = 0;
+    if(cupon==='CLEAN10'){ desc = Math.round(antesDescuento*0.10); partidas.push({desc:`Descuento CLEAN10 (10%)`, monto:-desc}); }
+    else if(cupon==='PRIMERA'){ desc = Math.round(antesDescuento*0.08); partidas.push({desc:`Descuento PRIMERA (8%)`, monto:-desc}); }
+
+    let baseImp = antesDescuento - desc;
+    const iva = Math.round(baseImp*0.13);
+    const total = baseImp + iva;
+
+    return {
+      cliente:{nombre,email,tel,id}, ubicacion:{prov,dir,fecha,hora,distKm,parqueo,noct,urg},
+      servicio:{tipo,area,freq, r:{rHabit,rBanos,rPisos,rVentanas}, o:{oPuestos,oBanos,oSalas,oPisos}, v:{vTipo,vAsientos,vSuciedad}},
+      cupon, notas, partidas, subtotal, logistica, desc, iva, total
+    };
+  }
+
+  function renderResumen(o){
+    const box=document.getElementById('qOut');
+    const rows = o.partidas.map(p=>`<tr><td>${p.desc}</td><td class="num">${p.monto<0?'-'+col(-p.monto):col(p.monto)}</td></tr>`).join('');
+    box.innerHTML = `
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div><b>Cliente:</b> ${o.cliente.nombre} &nbsp; <span class="muted">${o.cliente.email||''}</span></div>
+        <div><b>Fecha/Hora:</b> ${o.ubicacion.fecha||'—'} ${o.ubicacion.hora||''}</div>
+      </div>
+      <div class="muted" style="margin:.25rem 0 .75rem"><b>Ubicación:</b> ${o.ubicacion.prov||'—'} — ${o.ubicacion.dir||'—'}</div>
+      <div class="card" style="padding:0;overflow:auto">
+        <table class="sum">
+          <thead><tr><th>Concepto</th><th class="num">Monto</th></tr></thead>
+          <tbody>${rows}</tbody>
+          <tfoot>
+            <tr><td>Subtotal</td><td class="num">${col(o.subtotal)}</td></tr>
+            <tr><td>Logística / Recargos</td><td class="num">${col(o.logistica)}</td></tr>
+            <tr><td>Descuentos</td><td class="num">${o.desc?'-'+col(o.desc):col(0)}</td></tr>
+            <tr><td>IVA (13%)</td><td class="num">${col(o.iva)}</td></tr>
+            <tr><td><b>Total</b></td><td class="num"><b>${col(o.total)}</b></td></tr>
+          </tfoot>
+        </table>
+      </div>
+      ${o.notas?`<p style="margin:.6rem 0 0"><b>Notas:</b> ${o.notas}</p>`:''}
+    `;
+  }
+
+  /* ---------- PDF: nodo visible oculto + fallback jsPDF ---------- */
+  function buildPdfNode(o){
+    const cont = document.createElement('div');
+    cont.id = 'pdfTmp';
+    // Dentro del viewport para que html2canvas calcule tamaño; oculto visualmente
+    cont.style.cssText = 'position:fixed;left:0;top:0;width:794px;visibility:hidden;background:#fff;padding:16px 12px;margin:0;font-family:Inter,Arial,sans-serif;';
+    const li = o.partidas.map(p=>`
+      <tr>
+        <td style="padding:6px 4px;border-bottom:1px solid #e2e8f0">${p.desc}</td>
+        <td style="padding:6px 4px;border-bottom:1px solid #e2e8f0;text-align:right">${p.monto<0?'-'+colPDF(-p.monto):colPDF(p.monto)}</td>
+      </tr>`).join('');
+
+    cont.innerHTML = `
+      <h1 style="margin:0 0 6px;color:#0ea5e9">CleanExperts — Cotización</h1>
+      <p style="margin:0 0 10px;color:#475569">
+        Cliente: ${o.cliente.nombre} • Email: ${o.cliente.email||'—'} • Tel: ${o.cliente.tel||'—'}
+      </p>
+      <p style="margin:0 0 10px;color:#475569">
+        Ubicación: ${o.ubicacion.prov||'—'} — ${o.ubicacion.dir||'—'} • ${o.ubicacion.fecha||'—'} ${o.ubicacion.hora||''}
+      </p>
+      <table style="width:100%;border-collapse:collapse;margin-top:8px">
+        <thead>
+          <tr>
+            <th style="text-align:left;border-bottom:1px solid #e2e8f0;padding:6px 4px">Concepto</th>
+            <th style="text-align:right;border-bottom:1px solid #e2e8f0;padding:6px 4px">Monto</th>
+          </tr>
+        </thead>
+        <tbody>${li}</tbody>
+        <tfoot>
+          <tr><td style="padding:6px 4px">Subtotal</td><td style="text-align:right;padding:6px 4px">${colPDF(o.subtotal)}</td></tr>
+          <tr><td style="padding:6px 4px">Logística / Recargos</td><td style="text-align:right;padding:6px 4px">${colPDF(o.logistica)}</td></tr>
+          <tr><td style="padding:6px 4px">Descuentos</td><td style="text-align:right;padding:6px 4px">${o.desc?('-'+colPDF(o.desc)):colPDF(0)}</td></tr>
+          <tr><td style="padding:6px 4px">IVA (13%)</td><td style="text-align:right;padding:6px 4px">${colPDF(o.iva)}</td></tr>
+          <tr><td style="padding:6px 4px"><b>Total</b></td><td style="text-align:right;padding:6px 4px"><b>${colPDF(o.total)}</b></td></tr>
+        </tfoot>
+      </table>
+      ${o.notas?`<p style="margin:10px 0 0;color:#334155">Notas: ${o.notas}</p>`:''}
+      <p style="margin:10px 0 0;color:#64748b">*Estimación sujeta a visita técnica.</p>
+    `;
+    return cont;
+  }
+
+  async function savePdfJsPDF(o, filename){
+    const JS = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : window.jsPDF;
+    if(!JS) throw new Error('jsPDF no disponible');
+    const doc = new JS({ unit:'pt', format:'a4', compress:true });
+
+    const pageW = 595.28, pageH = 841.89, m = 40;
+    let y = m;
+
+    doc.setFont('helvetica','bold'); doc.setFontSize(18);
+    doc.setTextColor(14,165,233);
+    doc.text('CleanExperts — Cotización', m, y); y += 22;
+
+    doc.setTextColor(0); doc.setFont('helvetica','normal'); doc.setFontSize(11);
+    doc.text(`Cliente: ${o.cliente.nombre}  Email: ${o.cliente.email||'—'}  Tel: ${o.cliente.tel||'—'}`, m, y); y += 16;
+    doc.text(`Ubicación: ${o.ubicacion.prov||'—'} — ${o.ubicacion.dir||'—'}  ${o.ubicacion.fecha||'—'} ${o.ubicacion.hora||''}`, m, y); y += 14;
+    doc.line(m, y, pageW - m, y); y += 12;
+
+    doc.setFont('helvetica','bold');
+    doc.text('Concepto', m, y);
+    doc.text('Monto', pageW - m, y, { align: 'right' });
+    y += 10;
+    doc.setFont('helvetica','normal');
+
+    o.partidas.forEach(p=>{
+      if(y > pageH - m - 80){ doc.addPage(); y = m; }
+      const monto = p.monto<0 ? ('-' + colPDF(-p.monto)) : colPDF(p.monto);
+      const desc = (p.desc.length > 95) ? (p.desc.slice(0,92)+'…') : p.desc;
+      doc.text(desc, m, y);
+      doc.text(monto, pageW - m, y, { align: 'right' });
+      y += 16;
+    });
+
+    y += 6; doc.line(m, y, pageW - m, y); y += 14;
+
+    const finales = [
+      ['Subtotal', colPDF(o.subtotal)],
+      ['Logística / Recargos', colPDF(o.logistica)],
+      ['Descuentos', o.desc ? ('-' + colPDF(o.desc)) : colPDF(0)],
+      ['IVA (13%)', colPDF(o.iva)],
+      ['Total', colPDF(o.total)],
+    ];
+    finales.forEach(([k,v], i)=>{
+      if(y > pageH - m - 40){ doc.addPage(); y = m; }
+      if(i === finales.length - 1){ doc.setFont('helvetica','bold'); }
+      doc.text(k, m, y);
+      doc.text(v, pageW - m, y, { align: 'right' });
+      if(i === finales.length - 1){ doc.setFont('helvetica','normal'); }
+      y += 16;
+    });
+
+    if(o.notas){
+      if(y > pageH - m - 60){ doc.addPage(); y = m; }
+      doc.text('Notas: ' + o.notas, m, y);
+    }
+
+    doc.save(filename);
+  }
+
+  /* ---------- Botones ---------- */
+  document.getElementById('btnCalc').addEventListener('click', ()=>{
+    const o = calcular(); renderResumen(o);
   });
 
-  btnLimpiar.addEventListener('click', ()=>{
-    frm.reset();
-    res.innerHTML = '';
+  document.getElementById('btnPDF').addEventListener('click', async ()=>{
+    const o = calcular(); renderResumen(o);
+    const filename = `Cotizacion_CleanExperts_${Date.now()}.pdf`;
+
+    // Nodo dentro del viewport, oculto con visibility
+    const node = buildPdfNode(o);
+    document.body.appendChild(node);
+
+    try{
+      const opt = {
+        filename,
+        margin: 10,
+        html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+        jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+      };
+      await html2pdf().set(opt).from(node).save();
+    }catch(err){
+      console.warn('html2pdf falló, usando jsPDF directo:', err);
+      await savePdfJsPDF(o, filename);
+    }finally{
+      node.remove();
+    }
+
+    Swal.fire({icon:'success',title:'PDF generado',text:'Se descargó su cotización.',confirmButtonColor:'#0ea5e9'});
   });
-  </script>
+
+  document.getElementById('btnMail').addEventListener('click', ()=>{
+    const auth = localStorage.getItem('cx_auth')==='true';
+    if(!auth){
+      Swal.fire({icon:'info',title:'Inicie sesión',text:'Para enviar por correo, inicie sesión.',confirmButtonColor:'#0ea5e9'}).then(()=>location.href='login.html');
+      return;
+    }
+    const o = calcular(); renderResumen(o);
+    const to = (document.getElementById('qEmail').value||'hola@cleanexperts.cr').trim();
+    let body = `Detalle de cotización:%0D%0A%0D%0A`;
+    o.partidas.forEach(p=>{
+      const m = p.monto<0?('-'+colPDF(-p.monto)):colPDF(p.monto);
+      body += `${p.desc}: ${m}%0D%0A`;
+    });
+    body += `%0D%0ASubtotal: ${colPDF(o.subtotal)}%0D%0ALogística: ${colPDF(o.logistica)}%0D%0ADescuentos: ${o.desc?('-'+colPDF(o.desc)):colPDF(0)}%0D%0AIVA: ${colPDF(o.iva)}%0D%0ATotal: ${colPDF(o.total)}%0D%0A%0D%0ACleanExperts`;
+    location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent('Cotización CleanExperts')}&body=${body}`;
+    Swal.fire({icon:'success',title:'Correo preparado',text:'Se abrió su cliente de correo.',confirmButtonColor:'#0ea5e9'});
+  });
+
+  // Guardar / Cargar / Limpiar
+  document.getElementById('btnSave').addEventListener('click', ()=>{
+    const data = Object.fromEntries([...document.querySelectorAll('#qForm input, #qForm select, #qForm textarea')].map(el=>[el.id, (el.type==='checkbox')?el.checked:el.value]));
+    localStorage.setItem('cx_quote_draft', JSON.stringify(data));
+    Swal.fire({icon:'success',title:'Borrador guardado',text:'Se guardaron los campos localmente.',confirmButtonColor:'#0ea5e9'});
+  });
+  (function loadDraft(){
+    try{
+      const raw = localStorage.getItem('cx_quote_draft'); if(!raw) return;
+      const data = JSON.parse(raw);
+      Object.entries(data).forEach(([id,val])=>{
+        const el=document.getElementById(id); if(!el) return;
+        if(el.type==='checkbox') el.checked = !!val; else el.value = val;
+      });
+      toggleBlocks();
+      document.querySelectorAll('.toggle input[type="checkbox"]').forEach(ch=>{
+        const parent = ch.closest('.toggle'); parent?.classList.toggle('is-on', ch.checked);
+      });
+    }catch(_){}
+  })();
+  document.getElementById('btnClear').addEventListener('click', ()=>{
+    document.getElementById('qForm').reset(); toggleBlocks();
+    document.getElementById('qOut').innerHTML = `<p class="muted" style="margin:0">Calcule para ver el desglose de partidas aquí…</p>`;
+    document.querySelectorAll('.toggle').forEach(t=>t.classList.remove('is-on'));
+  });
+
+  // Marcar visualmente toggles activos
+  document.querySelectorAll('.toggle input[type="checkbox"]').forEach(ch=>{
+    const parent = ch.closest('.toggle');
+    const set = ()=>parent.classList.toggle('is-on', ch.checked);
+    ch.addEventListener('change', set); set();
+  });
+</script>
 </body>
 </html>

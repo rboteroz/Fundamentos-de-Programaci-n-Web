@@ -1,0 +1,159 @@
+/* ===========================
+   CleanQuote — Tour 360 (QUIZ)
+   Archivo: css/tour.css
+   =========================== */
+
+/* --------- Variables y base --------- */
+:root{
+  --bg:#0d1117;         /* fondo oscuro elegante */
+  --bg-2:#111827;
+  --text:#e6edf3;       /* texto claro */
+  --muted:#94a3b8;      /* texto secundario */
+  --brand:#0ea5e9;      /* acento (celeste) */
+  --brand-cta:#22c55e;  /* acento secundario (verde) */
+  --card:#161b22;       /* paneles/ventanas */
+  --shadow:0 10px 25px rgba(0,0,0,.35);
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html, body{ height:100%; }
+body{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+
+/* Estados de foco accesibles (teclado) */
+:focus{ outline: 2px solid var(--brand); outline-offset: 3px; }
+:focus:not(:focus-visible){ outline: none; }
+:focus-visible{ outline: 2px solid var(--brand); outline-offset: 3px; }
+
+/* Utilidades */
+.visually-hidden{
+  position:absolute !important; width:1px; height:1px;
+  margin:-1px; padding:0; border:0; clip:rect(0 0 0 0); overflow:hidden;
+}
+
+/* --------- Portada --------- */
+body.portada{
+  min-height:100vh;
+  display:grid;
+  grid-template-rows: auto 1fr auto;
+  background: linear-gradient(120deg, var(--bg), var(--bg-2));
+  color: var(--text);
+}
+
+.top{
+  padding:2rem 1rem;
+  text-align:center;
+}
+.top h1{
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  color:#fff;
+  letter-spacing:.2px;
+}
+.lead{
+  max-width:900px;
+  margin:.5rem auto 0;
+  color: var(--muted);
+}
+
+.hero{
+  display:grid;
+  place-items:center;
+  gap:1rem;
+  padding: 1.2rem;
+}
+.hero__thumb{
+  width:min(900px, 92%);
+  border-radius:14px;
+  box-shadow: var(--shadow);
+  object-fit:cover;
+  display:block;
+}
+
+.btn{
+  display:inline-block;
+  padding:.85rem 1.25rem;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:800;
+  letter-spacing:.2px;
+  transition: transform .08s ease, box-shadow .12s ease, background .2s ease, color .2s ease, border-color .2s ease;
+  cursor:pointer;
+  user-select:none;
+}
+.btn--primary{
+  background: var(--brand);
+  color: #001018;
+  box-shadow: 0 8px 18px rgba(14,165,233,.35);
+  border: 2px solid transparent;
+}
+.btn--primary:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(14,165,233,.45);
+}
+.btn--primary:active{
+  transform: translateY(0);
+  box-shadow: 0 6px 14px rgba(14,165,233,.35);
+}
+
+.footer{
+  padding:1rem;
+  text-align:center;
+  color: var(--muted);
+}
+
+/* --------- Tour (visor 360) --------- */
+body.tour, #viewer{ height:100%; background:#000; }
+#viewer canvas{ outline:none; }
+
+/* --------- SweetAlert2 (modales de contenido) --------- */
+.swal2-popup{
+  background: var(--card) !important;
+  color: var(--text) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--shadow) !important;
+}
+.swal2-title{ color:#fff !important; }
+.swal2-confirm{
+  background: var(--brand-cta) !important;
+  color:#04210f !important;
+  border-radius: 10px !important;
+  font-weight: 800 !important;
+  box-shadow: 0 8px 18px rgba(34,197,94,.25) !important;
+}
+.swal2-confirm:hover{
+  filter: brightness(1.05);
+}
+
+/* Contenido embebido (PDF / video) responsivo */
+.embed{
+  width: min(90vw, 900px);
+  height: min(70vh, 520px);
+  border:0;
+  border-radius: 12px;
+}
+
+/* Imágenes dentro de SweetAlert */
+.swal2-html-container img{
+  max-width:100%;
+  height:auto;
+  display:block;
+  border-radius: 12px;
+  box-shadow: 0 10px 18px rgba(0,0,0,.25);
+}
+
+/* Texto de los modales */
+.swal2-html-container p{
+  margin-top:.6rem;
+  line-height:1.55;
+  color: var(--text);
+}
+
+/* --------- Responsivo --------- */
+@media (max-width: 720px){
+  .hero__thumb{ width:94%; border-radius:12px; }
+  .btn{ width: max(220px, 60%); text-align:center; }
+  .embed{ height: min(64vh, 460px); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .btn{ transition: none; }
+}

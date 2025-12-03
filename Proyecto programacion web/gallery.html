@@ -4,35 +4,274 @@
   <meta charset="utf-8">
   <title>CleanExperts — Galería</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon_cleanexperts.png">
-  <link rel="stylesheet" href="css/index.css">
-  <link rel="stylesheet" href="css/animate.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *,*::before,*::after{ box-sizing:border-box }
+    html{ font-family:'Inter',ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial }
+    body{ margin:0; color:#0b1220; background:#fff }
+    :root{ --brand:#0ea5e9; --ink:#0b1220; --muted:#475569; --bd:#e5e7eb; --pad:24px; --radius:12px }
+
+    .topbar{ position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--bd) }
+    .topbar-inner{ display:flex; align-items:center; gap:16px; padding:12px var(--pad) }
+    .brand a{ color:var(--brand)!important; text-decoration:none; font-weight:700; letter-spacing:-.01em }
+    .nav ul{ display:flex; gap:14px; align-items:center; padding:0; margin:0; list-style:none; width:100% }
+    .nav__link{ padding:10px 12px; border-radius:10px; text-decoration:none; color:var(--ink); font-weight:600 }
+    .nav__link:hover, .nav__link[aria-current="page"]{ background:#f1f5f9 }
+
+    /* Dropdown */
+    .nav__group{ position:relative }
+    .nav__toggle{ background:transparent; border:0; cursor:pointer; font:inherit; color:inherit; padding:10px 12px; border-radius:10px }
+    .nav__menu{
+      position:absolute; top:100%; left:0; min-width:220px; background:#fff; border:1px solid var(--bd); border-radius:12px;
+      box-shadow:0 10px 30px rgba(0,0,0,.08); padding:8px; display:none; z-index:60;
+    }
+    .nav__item{ display:block; padding:10px 12px; border-radius:10px; color:#0b1220; text-decoration:none; white-space:nowrap }
+    .nav__item:hover{ background:#f1f5f9 }
+    .nav__group.is-open .nav__menu{ display:block }
+
+    .wrap{ max-width:1100px; margin:0 auto; padding:calc(var(--pad) + 8px) var(--pad) }
+    .title{ margin:0 0 6px; font-size:clamp(1.9rem,1.5rem + 1.4vw,2.5rem); font-weight:800 }
+    .muted{ color:var(--muted) }
+
+    .card{ background:#fff; border:1px solid var(--bd); border-radius:var(--radius); padding:18px 16px; box-shadow:0 8px 24px rgba(16,24,40,.05) }
+
+    /* Panel filtros */
+    .grid{ display:grid; gap:16px; grid-template-columns:repeat(12,1fr) }
+    .span-12{ grid-column:span 12 } .span-6{ grid-column:span 6 } .span-3{ grid-column:span 3 }
+    @media (max-width:900px){ .span-6,.span-3{ grid-column:span 12 } }
+    label{ font-weight:600; display:block; margin-bottom:6px }
+    input[type="search"],select{
+      width:100%; border:1px solid var(--bd); border-radius:12px; padding:12px 14px; font-size:16px; color:#0b1220; background:#fff; outline:none;
+    }
+    input:focus,select:focus{ border-color:var(--brand); box-shadow:0 0 0 3px rgba(14,165,233,.18) }
+
+    /* Galería */
+    .gallery{ display:grid; gap:16px; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); margin-top:14px }
+    .g-item{ border:1px solid var(--bd); border-radius:12px; overflow:hidden; background:#fff; cursor:pointer }
+    .g-item img{ width:100%; height:220px; object-fit:cover; display:block }
+    .g-item figcaption{ padding:10px 12px; font-size:.95rem; color:#334155 }
+
+    /* Lightbox */
+    .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.92); display:none; place-items:center; z-index:10000 }
+    .lightbox.is-open{ display:grid }
+    .lb__img{ max-width:92vw; max-height:86vh; border-radius:12px; border:1px solid rgba(255,255,255,.1) }
+    .lb__caption{ color:#fff; margin-top:10px; text-align:center; font-size:1rem }
+
+    .lb__ctrl{ position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,.12); border:0; color:#fff; width:48px; height:48px; border-radius:50%; cursor:pointer }
+    .lb__prev{ left:16px } .lb__next{ right:16px }
+    .lb__close{ position:absolute; top:14px; right:18px; background:transparent; border:0; color:#fff; font-size:36px; cursor:pointer }
+
+    footer{ border-top:1px solid var(--bd); padding:18px var(--pad); text-align:center; color:#64748b }
+
+    /* Tour overlay */
+    .tour360{ position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.98); z-index:10000 }
+    .tour360.is-open{ display:grid }
+    .tour360__frame{ width:min(96vw,1400px); height:min(90vh,850px); border:0; border-radius:14px; box-shadow:0 10px 40px rgba(0,0,0,.5) }
+    .tour360__close{ position:absolute; top:14px; right:18px; font-size:34px; line-height:1; background:transparent; border:0; color:#fff; cursor:pointer }
+  </style>
 </head>
 <body>
-  <header class="topbar">
+<header class="topbar">
+  <div class="topbar-inner">
     <div class="brand"><a href="index.html">CleanExperts</a></div>
     <nav class="nav" aria-label="Navegación principal">
       <ul>
         <li><a class="nav__link" href="login.html">Inicio</a></li>
         <li><a class="nav__link" href="apps.html">Servicios</a></li>
-        <li><a class="nav__link is-active" href="gallery.html" aria-current="page">Galería</a></li>
+        <li><a class="nav__link" href="gallery.html" aria-current="page">Galería</a></li>
         <li><a class="nav__link" href="contacto.html">Contacto</a></li>
+        <li class="nav__group">
+          <button class="nav__toggle nav__link" aria-haspopup="true" aria-expanded="false">Formularios ▾</button>
+          <div class="nav__menu" role="menu">
+            <a class="nav__item" role="menuitem" href="contacto_form.html">Contacto</a>
+            <a class="nav__item" role="menuitem" href="suscripcion.html">Suscripción</a>
+            <a class="nav__item" role="menuitem" href="encuesta.html">Encuesta</a>
+          </div>
+        </li>
+        <li><a class="nav__link" href="#" id="navTour360">Tour 360</a></li>
       </ul>
     </nav>
-  </header>
+  </div>
+</header>
 
-  <main class="container">
-    <section class="section">
-      <h2 class="section__title">Galería de trabajos</h2>
-      <br>
-      <div class="gallery animate__animated animate__fadeInUp">
-        <img src="img/galeria1.jpg" alt="Antes y después 1">
-        <img src="img/galeria2.jpg" alt="Antes y después 2">
-        <img src="img/galeria3.jpg" alt="Equipo de limpieza">
+<main class="wrap">
+  <h1 class="title">Galería de trabajos</h1>
+  <p class="muted">Filtre por texto, categoría o “antes/después”. Haga clic para ver en grande.</p>
+
+  <!-- PANEL DE FILTROS -->
+  <section class="card" style="margin-bottom:14px">
+    <div class="grid" style="align-items:end">
+      <div class="span-6">
+        <label for="fltText">Buscar (texto)</label>
+        <input id="fltText" type="search" placeholder="Ej: antes, tapicería, oficinas…">
       </div>
-    </section>
-  </main>
+      <div class="span-3">
+        <label for="fltCat">Categoría</label>
+        <select id="fltCat">
+          <option value="all">Todas</option>
+          <option value="residencial">Residencial</option>
+          <option value="oficinas">Oficinas</option>
+          <option value="vehiculos">Vehículos</option>
+        </select>
+      </div>
+      <div class="span-3">
+        <label>&nbsp;</label>
+        <label style="display:flex;gap:8px;align-items:center;border:1px solid var(--bd);border-radius:12px;padding:10px 12px;">
+          <input id="fltAntes" type="checkbox"> Solo “Antes/Después”
+        </label>
+      </div>
+    </div>
+  </section>
 
-  <footer class="footer"><p>© 2025 CleanExperts</p></footer>
+  <!-- GALERÍA -->
+  <section class="gallery" id="gallery">
+    <!-- Use los mismos nombres que ya tiene (galeria1/2/3.jpg). Repito para ejemplo. -->
+    <figure class="g-item" data-cat="residencial" data-tags="antes,profunda">
+      <img src="img/galeria1.jpg" alt="Residencial — limpieza profunda (antes)">
+      <figcaption>Residencial — Antes</figcaption>
+    </figure>
+
+    <figure class="g-item" data-cat="oficinas" data-tags="desinfeccion,despues">
+      <img src="img/galeria2.jpg" alt="Oficinas — desinfección (después)">
+      <figcaption>Oficinas — Después</figcaption>
+    </figure>
+
+    <figure class="g-item" data-cat="vehiculos" data-tags="tapiceria,antes">
+      <img src="img/galeria3.jpg" alt="Vehículos — tapicería (antes)">
+      <figcaption>Vehículos — Tapicería</figcaption>
+    </figure>
+
+    <figure class="g-item" data-cat="residencial" data-tags="despues,profunda">
+      <img src="img/galeria1.jpg" alt="Residencial — limpieza profunda (después)">
+      <figcaption>Residencial — Después</figcaption>
+    </figure>
+
+    <figure class="g-item" data-cat="oficinas" data-tags="antes,desinfeccion">
+      <img src="img/galeria2.jpg" alt="Oficinas — desinfección (antes)">
+      <figcaption>Oficinas — Antes</figcaption>
+    </figure>
+
+    <figure class="g-item" data-cat="vehiculos" data-tags="tapiceria,despues">
+      <img src="img/galeria3.jpg" alt="Vehículos — tapicería (después)">
+      <figcaption>Vehículos — Después</figcaption>
+    </figure>
+  </section>
+</main>
+
+<footer>© 2025 CleanExperts</footer>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Visor de imágenes">
+  <button class="lb__close" aria-label="Cerrar">&times;</button>
+  <button class="lb__ctrl lb__prev" aria-label="Anterior">&#10094;</button>
+  <img class="lb__img" src="" alt="">
+  <button class="lb__ctrl lb__next" aria-label="Siguiente">&#10095;</button>
+  <div class="lb__caption" id="lbCaption"></div>
+</div>
+
+<!-- Tour overlay -->
+<div id="tour360" class="tour360" aria-hidden="true" role="dialog" aria-label="Tour Virtual 360">
+  <button class="tour360__close" aria-label="Cerrar tour">&times;</button>
+  <iframe class="tour360__frame" src="about:blank" title="Visor 360"></iframe>
+</div>
+
+<script>
+  // Dropdown accesible
+  (() => {
+    const grp = document.querySelector('.nav__group'); if(!grp) return;
+    const btn = grp.querySelector('.nav__toggle');
+    btn.addEventListener('click', () => {
+      const open = grp.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.addEventListener('click', (e) => {
+      if(!grp.contains(e.target)) { grp.classList.remove('is-open'); btn.setAttribute('aria-expanded','false'); }
+    });
+    document.addEventListener('keydown', (e) => { if(e.key==='Escape'){ grp.classList.remove('is-open'); btn.setAttribute('aria-expanded','false'); }});
+  })();
+
+  // Filtro textual + categoría + “solo antes/después”
+  (() => {
+    const q   = document.getElementById('fltText');
+    const cat = document.getElementById('fltCat');
+    const chk = document.getElementById('fltAntes');
+    const items = Array.from(document.querySelectorAll('.gallery .g-item'));
+
+    function matches(item){
+      const text = (q.value || '').trim().toLowerCase();
+      const selCat = cat.value;
+      const onlyAB = chk.checked;
+
+      const alt = (item.querySelector('img')?.alt || '').toLowerCase();
+      const tags = (item.dataset.tags || '').toLowerCase();
+      const icat = (item.dataset.cat || '').toLowerCase();
+
+      const okText = !text || alt.includes(text) || tags.includes(text);
+      const okCat  = (selCat === 'all') || (icat === selCat);
+      const okAB   = !onlyAB || /antes|después|despues/.test(tags) || /antes|después|despues/.test(alt);
+
+      return okText && okCat && okAB;
+    }
+
+    function apply(){
+      items.forEach(it => { it.style.display = matches(it) ? '' : 'none'; });
+    }
+    [q,cat,chk].forEach(el => { el?.addEventListener('input', apply); el?.addEventListener('change', apply); });
+    apply();
+  })();
+
+  // Lightbox con carrusel (teclas ← →, Esc)
+  (() => {
+    const lb = document.getElementById('lightbox');
+    const img = lb.querySelector('.lb__img');
+    const cap = document.getElementById('lbCaption');
+    const btnPrev = lb.querySelector('.lb__prev');
+    const btnNext = lb.querySelector('.lb__next');
+    const btnClose= lb.querySelector('.lb__close');
+
+    const items = Array.from(document.querySelectorAll('.gallery .g-item'));
+    let idx = 0;
+    function open(i){
+      idx = i;
+      const node = items[idx];
+      const el = node.querySelector('img');
+      img.src = el.src; img.alt = el.alt;
+      cap.textContent = node.querySelector('figcaption')?.textContent || el.alt || '';
+      lb.classList.add('is-open'); lb.setAttribute('aria-hidden','false');
+      document.addEventListener('keydown', onKey);
+    }
+    function close(){
+      lb.classList.remove('is-open'); lb.setAttribute('aria-hidden','true');
+      img.src = ''; cap.textContent = '';
+      document.removeEventListener('keydown', onKey);
+    }
+    function prev(){ open((idx - 1 + items.length) % items.length); }
+    function next(){ open((idx + 1) % items.length); }
+    function onKey(e){
+      if(e.key === 'Escape') close();
+      if(e.key === 'ArrowLeft') prev();
+      if(e.key === 'ArrowRight') next();
+    }
+
+    items.forEach((node,i)=> node.addEventListener('click', ()=> open(i)));
+    btnPrev.addEventListener('click', prev);
+    btnNext.addEventListener('click', next);
+    btnClose.addEventListener('click', close);
+    lb.addEventListener('click', (e)=> { if(e.target === lb) close(); });
+  })();
+
+  // Tour 360
+  (()=>{const btn=document.getElementById('navTour360'); if(!btn) return;
+    const modal=document.getElementById('tour360'); const frame=modal.querySelector('.tour360__frame'); const close=modal.querySelector('.tour360__close');
+    function open(){ frame.src='tour.html'; modal.classList.add('is-open'); modal.setAttribute('aria-hidden','false'); document.addEventListener('keydown',onKey) }
+    function closeIt(){ modal.classList.remove('is-open'); modal.setAttribute('aria-hidden','true'); frame.src='about:blank'; document.removeEventListener('keydown',onKey) }
+    function onKey(e){ if(e.key==='Escape') closeIt(); }
+    btn.addEventListener('click',e=>{e.preventDefault();open();}); close.addEventListener('click',closeIt); modal.addEventListener('click',e=>{ if(e.target===modal) closeIt(); });
+  })();
+</script>
 </body>
 </html>

@@ -4,55 +4,170 @@
   <meta charset="utf-8">
   <title>CleanExperts — Sitio Web</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon_cleanexperts.png">
-  <link rel="stylesheet" href="css/index.css">
-  <link rel="stylesheet" href="css/animate.css">
+
+  <!-- Tipografía + sistema visual -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{ --brand:#0ea5e9; --ink:#0b1220; --muted:#475569; --bd:#e5e7eb; --pad:24px; --radius:12px; }
+    html{ font-family:'Inter',ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; color:var(--ink); }
+    body{ margin:0; background:#fff; }
+
+    .brand a,.brand-name{ color:var(--brand)!important; text-decoration:none } 
+    .brand a{ font-weight:700; letter-spacing:-.01em }
+
+    .topbar{ position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--bd) }
+    .nav ul{ display:flex; gap:14px; align-items:center; padding:12px var(--pad); margin:0; list-style:none }
+    .nav__link{ padding:10px 12px; border-radius:10px; text-decoration:none; color:var(--ink); font-weight:600; letter-spacing:.02em; }
+    .nav__link:hover, .nav__link[aria-current="page"]{ background:#f1f5f9 }
+
+    .btn{ appearance:none; border:0; border-radius:12px; cursor:pointer; font-weight:700; min-height:44px; padding-block:12px; padding-inline:clamp(14px,2.5vw,22px); font-size:clamp(.95rem,.9rem + .3vw,1.05rem); transition:transform .06s, box-shadow .2s, opacity .2s }
+    .btn--primary{ background:var(--brand); color:#fff } .btn--ghost{ background:#f1f5f9; color:var(--ink) }
+    .btn:focus-visible{ outline:3px solid color-mix(in srgb, var(--brand) 40%, transparent); outline-offset:2px } 
+    .btn:active{ transform:translateY(1px) }
+    .btn-group{ display:flex; gap:12px; flex-wrap:wrap } 
+    @media (max-width:640px){ .btn{ width:100% } .btn-group{ gap:10px } }
+
+    /* Layout aireado */
+    .wrap{max-width:1100px;margin:0 auto;padding:calc(var(--pad) + 8px) var(--pad);}
+    .section{padding:36px 0;border-bottom:1px solid #eef2f7}
+    .section:last-of-type{border-bottom:0}
+    .section__title{margin:0 0 10px;font-weight:700;letter-spacing:-0.012em;font-size:clamp(1.9rem,1.6rem + 1.3vw,2.6rem)}
+    .muted{color:var(--muted)}
+
+    /* Cards servicios */
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;margin-top:8px}
+    .card{
+      background:#fff;border:1px solid var(--bd);border-radius:var(--radius);
+      padding:20px 18px;box-shadow:0 8px 24px rgba(16,24,40,.04)
+    }
+    .card__img{
+      width:100%; height:180px; object-fit:cover;
+      border-radius:10px; border:1px solid var(--bd); margin-bottom:12px;
+      display:block;
+    }
+    .card h3{margin:0 0 6px;font-size:clamp(1.5rem,1.34rem + .8vw,2rem);font-weight:600;letter-spacing:-.006em}
+    .card p{margin:0;color:var(--muted)}
+
+    /* Galería rápida */
+    .gallery{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px}
+    .gallery a{ display:block; border-radius:12px; overflow:hidden; border:1px solid var(--bd) }
+    .gallery img{width:100%;height:220px;object-fit:cover;display:block}
+
+    /* Footer */
+    .footer{border-top:1px solid var(--bd);padding:18px var(--pad);text-align:center;color:var(--muted)}
+
+    /* Overlay Tour 360 */
+    .tour360{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.98);z-index:10000}
+    .tour360.is-open{display:grid}
+    .tour360__frame{width:min(96vw,1400px);height:min(90vh,850px);border:0;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+    .tour360__close{position:absolute;top:14px;right:18px;font-size:34px;line-height:1;background:transparent;border:0;color:#fff;cursor:pointer}
+    .tour360__close:focus{outline:3px solid color-mix(in srgb, var(--brand) 50%, transparent);outline-offset:2px}
+    @media (max-width:640px){ .tour360__frame{width:100vw;height:100vh;border-radius:0} }
+
+    /* ---------- LIGHTBOX (sin librerías) ---------- */
+    .lb{ position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.92); z-index:11000 }
+    .lb.is-open{ display:grid }
+    .lb__stage{ position:relative; width:min(96vw,1400px); height:min(90vh,850px); display:flex; align-items:center; justify-content:center }
+    .lb__img{ max-width:96%; max-height:86vh; border-radius:12px; box-shadow:0 12px 40px rgba(0,0,0,.5); border:1px solid rgba(255,255,255,.12) }
+    .lb__caption{ position:absolute; left:0; right:0; bottom:0; color:#fff; font-weight:600; padding:10px 14px; text-align:center; background:linear-gradient(180deg, transparent, rgba(0,0,0,.55)); border-radius:0 0 12px 12px; }
+    .lb__btn{ position:absolute; top:14px; background:rgba(0,0,0,.45); color:#fff; border:1px solid rgba(255,255,255,.18); border-radius:999px; width:44px; height:44px; display:grid; place-items:center; font-size:20px; cursor:pointer }
+    .lb__btn:hover{ background:rgba(0,0,0,.6) }
+    .lb__close{ right:16px }
+    .lb__prev, .lb__next{ top:50%; transform:translateY(-50%) }
+    .lb__prev{ left:10px } .lb__next{ right:10px }
+    @media (max-width:640px){
+      .lb__img{ max-width:100%; max-height:82vh; border-radius:0 }
+      .lb__caption{ position:static; background:transparent; padding:10px 0 }
+      .lb__stage{ width:100vw; height:100vh }
+    }
+
+    /* ---------- Testimonios en tira ---------- */
+    .tira-wrap{ padding-top:10px }
+    .tira-hint{ margin:0 0 8px; color:var(--muted); font-size:.95rem }
+    .tira{
+      display:grid;
+      grid-auto-flow:column;
+      grid-auto-columns:minmax(280px, 1fr);
+      gap:16px;
+      overflow-x:auto;
+      scroll-snap-type:x proximity;
+      -webkit-overflow-scrolling:touch;
+      padding-bottom:8px;
+    }
+    .t-card{
+      scroll-snap-align:start;
+      background:#fff; border:1px solid var(--bd); border-radius:var(--radius);
+      padding:16px; box-shadow:0 8px 24px rgba(16,24,40,.05);
+      min-height:140px;
+    }
+    .t-head{ display:flex; align-items:center; gap:12px; margin-bottom:8px }
+    .t-avatar{
+      width:44px; height:44px; border-radius:999px; display:grid; place-items:center;
+      font-weight:700; color:#fff; background:var(--brand);
+      box-shadow:0 2px 8px rgba(14,165,233,.25);
+      user-select:none;
+    }
+    .t-name{ margin:0; font-weight:700 }
+    .t-role{ margin:0; color:var(--muted); font-size:.9rem }
+    .t-stars{ letter-spacing:.06em; color:#f59e0b; font-weight:700 }
+    .t-body{ margin:.35rem 0 0 }
+    .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+  </style>
 </head>
 <body>
   <header class="topbar">
-    <div class="brand"><a href="index.html">CleanExperts</a></div>
+    <div class="brand" style="padding-left:var(--pad);"><a href="index.html">CleanExperts</a></div>
     <nav class="nav" aria-label="Navegación principal">
       <ul>
         <li><a class="nav__link" href="login.html">Inicio</a></li>
         <li><a class="nav__link" href="apps.html">Servicios</a></li>
         <li><a class="nav__link" href="gallery.html">Galería</a></li>
         <li><a class="nav__link" href="contacto.html">Contacto</a></li>
+        <li><a class="nav__link" href="#" id="navTour360">Tour 360</a></li>
       </ul>
     </nav>
   </header>
 
-  <section class="banner" role="img" aria-label="Servicios de limpieza">
-    <img src="img/app_banner.jpg" alt="Banner de servicios de limpieza">
-  </section>
-
-  <main class="container">
+  <main class="wrap">
     <section class="section" id="servicios">
-      <h2 class="section__title">Servicios principales</h2>
+      <h2 class="section__title">Nuestros servicios</h2>
+      <p class="muted" style="max-width:68ch">Elija entre limpieza residencial, de oficina o para su vehículo.</p>
       <div class="cards">
         <article class="card">
-          <img src="img/servicios_hogar.jpg" alt="Limpieza de hogar">
-          <h3>Limpieza de hogar</h3>
-          <p>Planes periódicos y limpiezas profundas por m².</p>
+          <img class="card__img" src="img/servicios_hogar.jpg" alt="Servicio residencial: limpieza de hogares" loading="lazy">
+          <h3>Residencial</h3>
+          <p>Limpieza profunda de casas y apartamentos.</p>
         </article>
+
         <article class="card">
-          <img src="img/servicios_oficina.jpg" alt="Limpieza de oficina">
-          <h3>Limpieza de oficina</h3>
-          <p>Espacios de trabajo impecables y desinfección.</p>
+          <img class="card__img" src="img/servicios_oficina.jpg" alt="Servicio para oficinas: mantenimiento y desinfección" loading="lazy">
+          <h3>Oficinas</h3>
+          <p>Mantenimiento programado y desinfección.</p>
         </article>
+
         <article class="card">
-          <img src="img/servicios_vehiculo.jpg" alt="Limpieza de vehículo">
-          <h3>Limpieza de vehículo</h3>
-          <p>Lavado exterior, interior y pulido de detalles.</p>
+          <img class="card__img" src="img/servicios_vehiculo.jpg" alt="Servicio para vehículos: lavado interior y tapicería" loading="lazy">
+          <h3>Vehículos</h3>
+          <p>Lavado interior, tapicería y desinfección.</p>
         </article>
       </div>
     </section>
 
     <section class="section" id="galeria">
-      <h2 class="section__title">Galería</h2>
-      <div class="gallery">
-        <img src="img/galeria1.jpg" alt="Antes y después 1">
-        <img src="img/galeria2.jpg" alt="Antes y después 2">
-        <img src="img/galeria3.jpg" alt="Equipo de limpieza en acción">
+      <h2 class="section__title">Galería rápida</h2>
+      <div class="gallery" id="galeriaRapida">
+        <a class="lb-item" href="img/galeria1.jpg" data-caption="Antes y después 1">
+          <img src="img/galeria1.jpg" alt="Antes y después 1" loading="lazy">
+        </a>
+        <a class="lb-item" href="img/galeria2.jpg" data-caption="Antes y después 2">
+          <img src="img/galeria2.jpg" alt="Antes y después 2" loading="lazy">
+        </a>
+        <a class="lb-item" href="img/galeria3.jpg" data-caption="Equipo de limpieza en acción">
+          <img src="img/galeria3.jpg" alt="Equipo de limpieza en acción" loading="lazy">
+        </a>
       </div>
     </section>
 
@@ -61,8 +176,176 @@
       <p><b>Tel:</b> (506) 2222-2222 &nbsp; • &nbsp; <b>Email:</b> hola@cleanexperts.cr</p>
       <p>San José, Costa Rica</p>
     </section>
+
+    <!-- NUEVO: Testimonios en tira -->
+    <section class="section" id="testimonios">
+      <h2 class="section__title">Lo que dicen nuestros clientes</h2>
+      <p class="tira-hint">Deslice horizontalmente para ver más opiniones.</p>
+      <div class="tira" role="list" aria-label="Opiniones de clientes">
+        <article class="t-card" role="listitem">
+          <div class="t-head">
+            <div class="t-avatar" aria-hidden="true">MB</div>
+            <div>
+              <p class="t-name">María B.</p>
+              <p class="t-role">Residencial — Curridabat</p>
+            </div>
+          </div>
+          <div class="t-stars" aria-hidden="true">★★★★★</div>
+          <p class="t-body">“Dejaron el apartamento impecable y a tiempo. Excelente detalle.”</p>
+        </article>
+
+        <article class="t-card" role="listitem">
+          <div class="t-head">
+            <div class="t-avatar" aria-hidden="true">JC</div>
+            <div>
+              <p class="t-name">Javier C.</p>
+              <p class="t-role">Oficinas — Escazú</p>
+            </div>
+          </div>
+          <div class="t-stars" aria-hidden="true">★★★★★</div>
+          <p class="t-body">“La desinfección semanal nos funciona perfecto. Equipo muy profesional.”</p>
+        </article>
+
+        <article class="t-card" role="listitem">
+          <div class="t-head">
+            <div class="t-avatar" aria-hidden="true">AP</div>
+            <div>
+              <p class="t-name">Ana P.</p>
+              <p class="t-role">Vehículo — SUV</p>
+            </div>
+          </div>
+          <div class="t-stars" aria-hidden="true">★★★★★</div>
+          <p class="t-body">“Tapicería como nueva; se nota el nivel de detalle en la limpieza.”</p>
+        </article>
+
+        <article class="t-card" role="listitem">
+          <div class="t-head">
+            <div class="t-avatar" aria-hidden="true">CR</div>
+            <div>
+              <p class="t-name">Carlos R.</p>
+              <p class="t-role">Condominio — San José</p>
+            </div>
+          </div>
+          <div class="t-stars" aria-hidden="true">★★★★★</div>
+          <p class="t-body">“Muy ordenados y cuidadosos con las áreas comunes. Recomendados.”</p>
+        </article>
+
+        <article class="t-card" role="listitem">
+          <div class="t-head">
+            <div class="t-avatar" aria-hidden="true">LT</div>
+            <div>
+              <p class="t-name">Laura T.</p>
+              <p class="t-role">Airbnb — Sabana</p>
+            </div>
+          </div>
+          <div class="t-stars" aria-hidden="true">★★★★★</div>
+          <p class="t-body">“Respuesta rápida en urgencias; dejaron todo listo para el check-in.”</p>
+        </article>
+      </div>
+    </section>
   </main>
 
   <footer class="footer"><p>© 2025 CleanExperts</p></footer>
+
+  <!-- Overlay: Tour 360 -->
+  <div id="tour360" class="tour360" aria-hidden="true" role="dialog" aria-label="Tour Virtual 360">
+    <button class="tour360__close" aria-label="Cerrar tour">&times;</button>
+    <iframe class="tour360__frame" src="about:blank" title="Visor 360"></iframe>
+  </div>
+
+  <!-- Overlay: Lightbox -->
+  <div id="lightbox" class="lb" aria-hidden="true" role="dialog" aria-label="Visor de imágenes">
+    <div class="lb__stage">
+      <img class="lb__img" src="" alt="">
+      <div class="lb__caption" id="lbCaption"></div>
+      <button class="lb__btn lb__close" aria-label="Cerrar (Esc)">&times;</button>
+      <button class="lb__btn lb__prev" aria-label="Anterior (←)">&lsaquo;</button>
+      <button class="lb__btn lb__next" aria-label="Siguiente (→)">&rsaquo;</button>
+    </div>
+  </div>
+
+  <script>
+  /* Tour 360 */
+  (()=>{
+    const btn=document.getElementById('navTour360'); if(!btn) return;
+    const modal=document.getElementById('tour360'); const frame=modal.querySelector('.tour360__frame'); const close=modal.querySelector('.tour360__close'); let lastFocus=null;
+    function open(){ lastFocus=document.activeElement; frame.src='tour.html'; modal.classList.add('is-open'); modal.setAttribute('aria-hidden','false'); close.focus(); document.addEventListener('keydown',onKey); document.body.style.overflow='hidden'; }
+    function closeIt(){ modal.classList.remove('is-open'); modal.setAttribute('aria-hidden','true'); frame.src='about:blank'; document.removeEventListener('keydown',onKey); document.body.style.overflow=''; if(lastFocus) lastFocus.focus(); }
+    function onKey(e){ if(e.key==='Escape') closeIt(); }
+    btn.addEventListener('click',e=>{e.preventDefault();open();}); close.addEventListener('click',closeIt);
+    modal.addEventListener('click',e=>{ if(e.target===modal) closeIt(); });
+  })();
+
+  /* Marca azul en textos si aparece el nombre */
+  (()=>{
+    const BRAND='CleanExperts',RE=new RegExp(BRAND,'gi'); const logo=document.querySelector('.brand a'); if(logo) logo.textContent=BRAND;
+    const targets=document.querySelectorAll('h1,h2,h3,.brand,.nav,.lead,p,.footer');
+    function wrap(el){ const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null); const nodes=[]; for(let n; (n=w.nextNode());) nodes.push(n);
+      nodes.forEach(node=>{ const t=node.nodeValue; if(!RE.test(t)) return; const s=document.createElement('span'); s.innerHTML=t.replace(RE,'<span class="brand-name">$&</span>'); node.replaceWith(...s.childNodes); });
+    } targets.forEach(wrap);
+  })();
+
+  /* ---------- Lightbox + Carrusel (vanilla) ---------- */
+  (()=> {
+    const overlay = document.getElementById('lightbox');
+    const stageImg = overlay.querySelector('.lb__img');
+    const captionEl = document.getElementById('lbCaption');
+    const btnClose = overlay.querySelector('.lb__close');
+    const btnPrev  = overlay.querySelector('.lb__prev');
+    const btnNext  = overlay.querySelector('.lb__next');
+
+    const items = Array.from(document.querySelectorAll('.gallery a.lb-item'));
+    if(!items.length) return;
+
+    let idx = 0, lastFocus = null;
+
+    function show(i){
+      idx = (i + items.length) % items.length;
+      const a = items[idx];
+      const href = a.getAttribute('href');
+      const cap  = a.getAttribute('data-caption') || a.querySelector('img')?.alt || '';
+      stageImg.src = href;
+      stageImg.alt = cap;
+      captionEl.textContent = cap;
+    }
+
+    function open(i=0){
+      lastFocus = document.activeElement;
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+      show(i);
+      btnClose.focus();
+      document.addEventListener('keydown',onKey);
+    }
+
+    function close(){
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+      stageImg.src = '';
+      document.removeEventListener('keydown',onKey);
+      if(lastFocus) lastFocus.focus();
+    }
+
+    function onKey(e){
+      if(e.key==='Escape') close();
+      else if(e.key==='ArrowRight') show(idx+1);
+      else if(e.key==='ArrowLeft')  show(idx-1);
+    }
+
+    items.forEach((a,i)=>{
+      a.addEventListener('click',e=>{
+        e.preventDefault();
+        open(i);
+      });
+    });
+
+    btnClose.addEventListener('click', close);
+    btnNext.addEventListener('click', ()=> show(idx+1));
+    btnPrev.addEventListener('click', ()=> show(idx-1));
+    overlay.addEventListener('click', e=>{ if(e.target===overlay) close(); });
+  })();
+  </script>
 </body>
 </html>

@@ -1,12 +1,11 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>CleanExperts — Sitio Web</title>
+  <title>CleanExperts — Website</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon_cleanexperts.png">
 
-  <!-- Tipografía + sistema visual -->
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -23,17 +22,13 @@
     .nav__link{ padding:10px 12px; border-radius:10px; text-decoration:none; color:var(--ink); font-weight:600; letter-spacing:.02em; }
     .nav__link:hover, .nav__link[aria-current="page"]{ background:#f1f5f9 }
 
-    /* Switch de idioma */
+    /* Language switch */
     .lang-switch{ display:inline-flex; border:1px solid var(--bd); border-radius:999px; overflow:hidden }
     .lang-switch a{ text-decoration:none; padding:6px 12px; font-weight:700; color:var(--ink); line-height:1 }
     .lang-switch a[aria-current="true"]{ background:var(--brand); color:#fff }
 
     .btn{ appearance:none; border:0; border-radius:12px; cursor:pointer; font-weight:700; min-height:44px; padding-block:12px; padding-inline:clamp(14px,2.5vw,22px); font-size:clamp(.95rem,.9rem + .3vw,1.05rem); transition:transform .06s, box-shadow .2s, opacity .2s }
-    .btn--primary{ background:var(--brand); color:#fff } .btn--ghost{ background:#f1f5f9; color:var(--ink) }
-    .btn:focus-visible{ outline:3px solid color-mix(in srgb, var(--brand) 40%, transparent); outline-offset:2px } 
-    .btn:active{ transform:translateY(1px) }
-    .btn-group{ display:flex; gap:12px; flex-wrap:wrap } 
-    @media (max-width:640px){ .btn{ width:100% } .btn-group{ gap:10px } }
+    .btn--primary{ background:var(--brand); color:#fff } .btn--ghost{ background:#f1f5f9; color:#0b1220 }
 
     /* Layout */
     .wrap{max-width:1100px;margin:0 auto;padding:calc(var(--pad) + 8px) var(--pad);}
@@ -42,14 +37,14 @@
     .section__title{margin:0 0 10px;font-weight:700;letter-spacing:-0.012em;font-size:clamp(1.9rem,1.6rem + 1.3vw,2.6rem)}
     .muted{color:var(--muted)}
 
-    /* Cards servicios */
+    /* Cards */
     .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;margin-top:8px}
     .card{ background:#fff;border:1px solid var(--bd);border-radius:var(--radius); padding:20px 18px;box-shadow:0 8px 24px rgba(16,24,40,.04) }
     .card__img{ width:100%; height:180px; object-fit:cover; border-radius:10px; border:1px solid var(--bd); margin-bottom:12px; display:block; }
     .card h3{margin:0 0 6px;font-size:clamp(1.5rem,1.34rem + .8vw,2rem);font-weight:600;letter-spacing:-.006em}
     .card p{margin:0;color:var(--muted)}
 
-    /* Galería rápida */
+    /* Gallery */
     .gallery{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px}
     .gallery a{ display:block; border-radius:12px; overflow:hidden; border:1px solid var(--bd) }
     .gallery img{width:100%;height:220px;object-fit:cover;display:block}
@@ -57,13 +52,11 @@
     /* Footer */
     .footer{border-top:1px solid var(--bd);padding:18px var(--pad);text-align:center;color:var(--muted)}
 
-    /* Overlay Tour 360 */
+    /* 360 Overlay */
     .tour360{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.98);z-index:10000}
     .tour360.is-open{display:grid}
     .tour360__frame{width:min(96vw,1400px);height:min(90vh,850px);border:0;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
     .tour360__close{position:absolute;top:14px;right:18px;font-size:34px;line-height:1;background:transparent;border:0;color:#fff;cursor:pointer}
-    .tour360__close:focus{outline:3px solid color-mix(in srgb, var(--brand) 50%, transparent);outline-offset:2px}
-    @media (max-width:640px){ .tour360__frame{width:100vw;height:100vh;border-radius:0} }
 
     /* Lightbox */
     .lb{ position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.92); z-index:11000 }
@@ -72,17 +65,10 @@
     .lb__img{ max-width:96%; max-height:86vh; border-radius:12px; box-shadow:0 12px 40px rgba(0,0,0,.5); border:1px solid rgba(255,255,255,.12) }
     .lb__caption{ position:absolute; left:0; right:0; bottom:0; color:#fff; font-weight:600; padding:10px 14px; text-align:center; background:linear-gradient(180deg, transparent, rgba(0,0,0,.55)); border-radius:0 0 12px 12px; }
     .lb__btn{ position:absolute; top:14px; background:rgba(0,0,0,.45); color:#fff; border:1px solid rgba(255,255,255,.18); border-radius:999px; width:44px; height:44px; display:grid; place-items:center; font-size:20px; cursor:pointer }
-    .lb__btn:hover{ background:rgba(0,0,0,.6) }
-    .lb__close{ right:16px }
-    .lb__prev, .lb__next{ top:50%; transform:translateY(-50%) }
+    .lb__close{ right:16px } .lb__prev, .lb__next{ top:50%; transform:translateY(-50%) }
     .lb__prev{ left:10px } .lb__next{ right:10px }
-    @media (max-width:640px){
-      .lb__img{ max-width:100%; max-height:82vh; border-radius:0 }
-      .lb__caption{ position:static; background:transparent; padding:10px 0 }
-      .lb__stage{ width:100vw; height:100vh }
-    }
 
-    /* ---------- Testimonios en tira ---------- */
+    /* Testimonials strip */
     .tira-hint{ margin:0 0 8px; color:var(--muted); font-size:.95rem }
     .tira{
       display:grid;
@@ -115,19 +101,19 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand" style="padding-left:var(--pad);"><a href="index.html">CleanExperts</a></div>
-    <nav class="nav" aria-label="Navegación principal">
+    <div class="brand" style="padding-left:var(--pad);"><a href="index-en.html">CleanExperts</a></div>
+    <nav class="nav" aria-label="Main navigation">
       <ul>
-        <li><a class="nav__link" href="login.html">Inicio</a></li>
-        <li><a class="nav__link" href="apps.html">Servicios</a></li>
-        <li><a class="nav__link" href="gallery.html">Galería</a></li>
-        <li><a class="nav__link" href="contacto.html">Contacto</a></li>
-        <li><a class="nav__link" href="#" id="navTour360">Tour 360</a></li>
+        <li><a class="nav__link" href="login.html">Sign in</a></li>
+        <li><a class="nav__link" href="apps.html">Services</a></li>
+        <li><a class="nav__link" href="gallery.html">Gallery</a></li>
+        <li><a class="nav__link" href="contacto.html">Contact</a></li>
+        <li><a class="nav__link" href="#" id="navTour360">360 Tour</a></li>
         <li class="nav__spacer"></li>
         <li>
-          <span class="lang-switch" role="group" aria-label="Idioma">
-            <a href="index.html" aria-current="true">ES</a>
-            <a href="index-en.html" title="View in English">EN</a>
+          <span class="lang-switch" role="group" aria-label="Language">
+            <a href="index.html" title="Ver en español">ES</a>
+            <a href="index-en.html" aria-current="true">EN</a>
           </span>
         </li>
       </ul>
@@ -135,66 +121,66 @@
   </header>
 
   <main class="wrap">
-    <section class="section" id="servicios">
-      <h2 class="section__title">Nuestros servicios</h2>
-      <p class="muted" style="max-width:68ch">Elija entre limpieza residencial, de oficina o para su vehículo.</p>
+    <section class="section" id="services">
+      <h2 class="section__title">Our services</h2>
+      <p class="muted" style="max-width:68ch">Choose home, office or vehicle cleaning — tailored to your needs.</p>
       <div class="cards">
         <article class="card">
-          <img class="card__img" src="img/servicios_hogar.jpg" alt="Servicio residencial: limpieza de hogares" loading="lazy">
-          <h3>Residencial</h3>
-          <p>Limpieza profunda de casas y apartamentos.</p>
+          <img class="card__img" src="img/servicios_hogar.jpg" alt="Home cleaning service" loading="lazy">
+          <h3>Residential</h3>
+          <p>Deep cleaning for houses and apartments.</p>
         </article>
 
         <article class="card">
-          <img class="card__img" src="img/servicios_oficina.jpg" alt="Servicio para oficinas: mantenimiento y desinfección" loading="lazy">
-          <h3>Oficinas</h3>
-          <p>Mantenimiento programado y desinfección.</p>
+          <img class="card__img" src="img/servicios_oficina.jpg" alt="Office maintenance and disinfection" loading="lazy">
+          <h3>Offices</h3>
+          <p>Scheduled maintenance and disinfection.</p>
         </article>
 
         <article class="card">
-          <img class="card__img" src="img/servicios_vehiculo.jpg" alt="Servicio para vehículos: lavado interior y tapicería" loading="lazy">
-          <h3>Vehículos</h3>
-          <p>Lavado interior, tapicería y desinfección.</p>
+          <img class="card__img" src="img/servicios_vehiculo.jpg" alt="Vehicle interior and upholstery cleaning" loading="lazy">
+          <h3>Vehicles</h3>
+          <p>Interior wash, upholstery and disinfection.</p>
         </article>
       </div>
     </section>
 
-    <section class="section" id="galeria">
-      <h2 class="section__title">Galería rápida</h2>
-      <div class="gallery" id="galeriaRapida">
-        <a class="lb-item" href="img/galeria1.jpg" data-caption="Antes y después 1">
-          <img src="img/galeria1.jpg" alt="Antes y después 1" loading="lazy">
+    <section class="section" id="quick-gallery">
+      <h2 class="section__title">Quick gallery</h2>
+      <div class="gallery" id="quickGallery">
+        <a class="lb-item" href="img/galeria1.jpg" data-caption="Before & After 1">
+          <img src="img/galeria1.jpg" alt="Before and after 1" loading="lazy">
         </a>
-        <a class="lb-item" href="img/galeria2.jpg" data-caption="Antes y después 2">
-          <img src="img/galeria2.jpg" alt="Antes y después 2" loading="lazy">
+        <a class="lb-item" href="img/galeria2.jpg" data-caption="Before & After 2">
+          <img src="img/galeria2.jpg" alt="Before and after 2" loading="lazy">
         </a>
-        <a class="lb-item" href="img/galeria3.jpg" data-caption="Equipo de limpieza en acción">
-          <img src="img/galeria3.jpg" alt="Equipo de limpieza en acción" loading="lazy">
+        <a class="lb-item" href="img/galeria3.jpg" data-caption="Cleaning team in action">
+          <img src="img/galeria3.jpg" alt="Cleaning team in action" loading="lazy">
         </a>
       </div>
     </section>
 
-    <section class="section" id="contacto">
-      <h2 class="section__title">Contacto</h2>
-      <p><b>Tel:</b> (506) 2222-2222 &nbsp; • &nbsp; <b>Email:</b> hola@cleanexperts.cr</p>
+    <section class="section" id="contact">
+      <h2 class="section__title">Contact</h2>
+      <p><b>Tel:</b> (506) 2222-2222 &nbsp; • &nbsp; <b>Email:</b> hello@cleanexperts.cr</p>
       <p>San José, Costa Rica</p>
     </section>
 
-    <!-- Testimonios en tira -->
-    <section class="section" id="testimonios">
-      <h2 class="section__title">Lo que dicen nuestros clientes</h2>
-      <p class="tira-hint">Deslice horizontalmente para ver más opiniones.</p>
-      <div class="tira" role="list" aria-label="Opiniones de clientes">
+    <!-- Testimonials strip -->
+    <section class="section" id="testimonials">
+      <h2 class="section__title">What our clients say</h2>
+      <p class="tira-hint">Swipe horizontally to see more reviews.</p>
+      <div class="tira" role="list" aria-label="Client reviews">
         <article class="t-card" role="listitem">
           <div class="t-head">
             <div class="t-avatar" aria-hidden="true">MB</div>
             <div>
               <p class="t-name">María B.</p>
-              <p class="t-role">Residencial — Curridabat</p>
+              <p class="t-role">Residential — Curridabat</p>
             </div>
           </div>
           <div class="t-stars" aria-hidden="true">★★★★★</div>
-          <p class="t-body">“Dejaron el apartamento impecable y a tiempo. Excelente detalle.”</p>
+          <p class="t-body">“They left the apartment spotless and on time. Great attention to detail.”</p>
         </article>
 
         <article class="t-card" role="listitem">
@@ -202,11 +188,11 @@
             <div class="t-avatar" aria-hidden="true">JC</div>
             <div>
               <p class="t-name">Javier C.</p>
-              <p class="t-role">Oficinas — Escazú</p>
+              <p class="t-role">Offices — Escazú</p>
             </div>
           </div>
           <div class="t-stars" aria-hidden="true">★★★★★</div>
-          <p class="t-body">“La desinfección semanal nos funciona perfecto. Equipo muy profesional.”</p>
+          <p class="t-body">“Weekly disinfection works perfectly for us. Very professional team.”</p>
         </article>
 
         <article class="t-card" role="listitem">
@@ -214,11 +200,11 @@
             <div class="t-avatar" aria-hidden="true">AP</div>
             <div>
               <p class="t-name">Ana P.</p>
-              <p class="t-role">Vehículo — SUV</p>
+              <p class="t-role">Vehicle — SUV</p>
             </div>
           </div>
           <div class="t-stars" aria-hidden="true">★★★★★</div>
-          <p class="t-body">“Tapicería como nueva; se nota el nivel de detalle en la limpieza.”</p>
+          <p class="t-body">“Upholstery looks brand new; you can tell the level of detail.”</p>
         </article>
 
         <article class="t-card" role="listitem">
@@ -226,11 +212,11 @@
             <div class="t-avatar" aria-hidden="true">CR</div>
             <div>
               <p class="t-name">Carlos R.</p>
-              <p class="t-role">Condominio — San José</p>
+              <p class="t-role">Condo — San José</p>
             </div>
           </div>
           <div class="t-stars" aria-hidden="true">★★★★★</div>
-          <p class="t-body">“Muy ordenados y cuidadosos con las áreas comunes. Recomendados.”</p>
+          <p class="t-body">“Very organized and careful with common areas. Highly recommended.”</p>
         </article>
 
         <article class="t-card" role="listitem">
@@ -242,7 +228,7 @@
             </div>
           </div>
           <div class="t-stars" aria-hidden="true">★★★★★</div>
-          <p class="t-body">“Respuesta rápida en urgencias; dejaron todo listo para el check-in.”</p>
+          <p class="t-body">“Fast response for urgent jobs; everything ready for check-in.”</p>
         </article>
       </div>
     </section>
@@ -250,25 +236,25 @@
 
   <footer class="footer"><p>© 2025 CleanExperts</p></footer>
 
-  <!-- Overlay: Tour 360 -->
-  <div id="tour360" class="tour360" aria-hidden="true" role="dialog" aria-label="Tour Virtual 360">
-    <button class="tour360__close" aria-label="Cerrar tour">&times;</button>
-    <iframe class="tour360__frame" src="about:blank" title="Visor 360"></iframe>
+  <!-- 360 Overlay -->
+  <div id="tour360" class="tour360" aria-hidden="true" role="dialog" aria-label="Virtual Tour 360">
+    <button class="tour360__close" aria-label="Close tour">&times;</button>
+    <iframe class="tour360__frame" src="about:blank" title="360 Viewer"></iframe>
   </div>
 
-  <!-- Overlay: Lightbox -->
-  <div id="lightbox" class="lb" aria-hidden="true" role="dialog" aria-label="Visor de imágenes">
+  <!-- Lightbox -->
+  <div id="lightbox" class="lb" aria-hidden="true" role="dialog" aria-label="Image viewer">
     <div class="lb__stage">
       <img class="lb__img" src="" alt="">
       <div class="lb__caption" id="lbCaption"></div>
-      <button class="lb__btn lb__close" aria-label="Cerrar (Esc)">&times;</button>
-      <button class="lb__btn lb__prev" aria-label="Anterior (←)">&lsaquo;</button>
-      <button class="lb__btn lb__next" aria-label="Siguiente (→)">&rsaquo;</button>
+      <button class="lb__btn lb__close" aria-label="Close (Esc)">&times;</button>
+      <button class="lb__btn lb__prev" aria-label="Previous (←)">&lsaquo;</button>
+      <button class="lb__btn lb__next" aria-label="Next (→)">&rsaquo;</button>
     </div>
   </div>
 
   <script>
-  /* Tour 360 */
+  // 360 Tour
   (function(){
     var btn=document.getElementById('navTour360'); if(!btn) return;
     var modal=document.getElementById('tour360'); var frame=modal.querySelector('.tour360__frame'); var close=modal.querySelector('.tour360__close'); var lastFocus=null;
@@ -279,7 +265,7 @@
     modal.addEventListener('click',function(e){ if(e.target===modal) closeIt(); });
   })();
 
-  /* Marca azul en textos si aparece el nombre */
+  // Brand highlight
   (function(){
     var BRAND='CleanExperts',RE=new RegExp(BRAND,'gi'); var logo=document.querySelector('.brand a'); if(logo) logo.textContent=BRAND;
     var targets=document.querySelectorAll('h1,h2,h3,.brand,.nav,.lead,p,.footer');
@@ -289,7 +275,7 @@
     targets.forEach(wrap);
   })();
 
-  /* Lightbox + Carrusel */
+  // Lightbox
   (function(){
     var overlay = document.getElementById('lightbox');
     var stageImg = overlay.querySelector('.lb__img');

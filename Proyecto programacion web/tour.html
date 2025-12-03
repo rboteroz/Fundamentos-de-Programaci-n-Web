@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Tour Virtual 360 — CleanQuote</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="img/favicon.png">
+  <link rel="stylesheet" href="css/tour.css" />
+
+  <!-- Fallback crítico por si el CSS no carga -->
+  <style>
+    html,body{height:100%;margin:0}
+    body.tour{min-height:100%;background:#000;color:#e6edf3}
+    #viewer{height:100vh;background:#000}
+    .loading{
+      position:fixed; inset:0; display:grid; place-items:center;
+      background:rgba(0,0,0,.8); color:#fff; z-index:20; font-family:system-ui,Arial,sans-serif
+    }
+    .loading__card{
+      background:#111827; border:1px solid #223; padding:16px 20px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,.35);
+      text-align:center; min-width:280px
+    }
+    .loading__bar{height:8px;background:#223;border-radius:999px;overflow:hidden;margin-top:10px}
+    .loading__bar > i{display:block;height:100%;width:0;background:#0ea5e9}
+    .loading__pct{margin-top:6px;font-size:14px;color:#a7b4c2}
+    /* Fallback para iframes/pdf/video en SweetAlert */
+    .embed{width:min(92vw,880px);height:min(70vh,560px);border:0;border-radius:10px}
+  </style>
+
+  <!-- CDNs (orden correcto: three antes de panolens) -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/panolens@0.11.0/build/panolens.min.js"></script>
+</head>
+<body class="tour">
+  <div id="viewer"></div>
+
+  <!-- Overlay de carga -->
+  <div id="loading" class="loading" role="status" aria-live="polite">
+    <div class="loading__card">
+      <div><strong>Cargando panorama 360…</strong></div>
+      <div class="loading__bar"><i id="loadingBar"></i></div>
+      <div class="loading__pct"><span id="loadingPct">0%</span></div>
+      <small>Si no avanza, revisa que <code>img/oficina_360.jpg</code> exista y esté en minúsculas.</small>
+    </div>
+  </div>
+
+  <noscript>Habilite JavaScript para visualizar el tour.</noscript>
+  <script src="js/tour.js"></script>
+</body>
+</html>
